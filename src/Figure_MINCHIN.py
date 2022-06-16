@@ -156,6 +156,7 @@ def nom_fonction_PHOTOSYNTHESE (PPFD) :
     """explication"""
 
     photosynthese = (alpha * PPFD * Ai_max)/(alpha * PPFD + Ai_max)
+    photosynthese = VALEUR_A_AJOUTER
 
     return photosynthese 
 
@@ -166,9 +167,14 @@ def nom_fonction_PHOTOSYNTHESE (PPFD) :
 # longueurs = l'ensemble des longueurs entre les deux organes
 # rayons = les rayons internes des conduits vasculaires
 # Minchin proposent une valeur de viscosité dépendant de la concentration en solutés
-viscosity = 0 
+viscosity = VALEUR_A_AJOUTER 
 temp_20 = 293
 gaz_p = 8.314
+
+
+longueur_ = VALEUR_A_AJOUTER
+rayon_ = VALEUR_A_AJOUTER
+
 def nom_fonction_RESISTANCES (longueur_, rayon_) :
     """Calcul du jeu de resistances du modèle - Minchin et al. 1993"""
     # viscosité fixe ? Si non besoin de rajouter une fonction de fitting pour viscosity
