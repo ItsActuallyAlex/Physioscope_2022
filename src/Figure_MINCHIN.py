@@ -171,7 +171,6 @@ viscosity = VALEUR_A_AJOUTER
 temp_20 = 293
 gaz_p = 8.314
 
-
 longueur_ = VALEUR_A_AJOUTER
 rayon_ = VALEUR_A_AJOUTER
 
