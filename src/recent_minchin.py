@@ -29,11 +29,6 @@ rayon_commun_entrenoeuds = np.array([0.160215922,0.160215922, 0.160215922], dtyp
 
 # CONSTANTES UTILISATION ET VOLUME __________
 # CHECKER VOIR CE QUI EST CALCULE VIA LA FONCTION UTILISATION (INCREMENTALE DE VOLUME) COMPARER AVEC LA FONCTION QUE J'AI
-utilisation = np.array([236419.6269, 244842.0206, 186507.4465], dtype=float)
-"Utilisation à tBFV - HH LH LL"
-
-delta = np.array([1.03453E+13, 1.03453E+13, 1.03453E+13], dtype=float)
-"moyenne des delta à tBFV - HH LH LL - COMMUNE"
 
 # # On garde un volume fixe pour cette étape
 volume_fixe_feuilles = np.array([1.79192E-06, 1.79192E-06, 1.79192E-06], dtype=float)
@@ -48,13 +43,13 @@ volume_fixe_bourgeon = np.array([formule, formule, formule], dtype=float)
 # CONSTANTES UTILISATION ET VOLUME __________
 
 # CONSTANTES RER __________
-RER = np.array([110, 90, 90], dtype=float)
-"Valeurs de RER pour le puits 1 aka les organes en croissance"
-
 k = np.array([405.197, 397.561, 357.624], dtype=float)
 v = np.array([220, 180, 180], dtype=float)
 "Paramètres k et v calculés via cm_t0_puits1 - HH LH LL"
 "Résolu pour v = 2*RER"
+
+delta = np.array([1.03453E+13, 1.03453E+13, 1.03453E+13], dtype=float)
+"moyenne des delta à tBFV - HH LH LL - COMMUNE"
 # CONSTANTES RER __________
 #### CONSTANTES
 
@@ -67,6 +62,8 @@ def PHOTOSYNTHESE_complete (alpha, PPFD, Ai_max, P) :
     eq = (alpha * PPFD * Ai_max)/(alpha * PPFD + Ai_max) * P 
 
     return eq
+"OK"
+
 def CONCENTRATION_SOURCE (surface_fixe_feuilles, volume_fixe_feuilles) :
     "Variation de la concentration dans la source"
 
@@ -74,7 +71,7 @@ def CONCENTRATION_SOURCE (surface_fixe_feuilles, volume_fixe_feuilles) :
     eq = PHOTOSYNTHESE_simple () * (surface_fixe_feuilles)/(volume_fixe_feuilles) 
 
     return eq
-
+"PLUS BESOIN ?"
 
 def PHOTOSYNTHESE_simple () :
     "valeurs de photosynthèse à tBFV"
@@ -82,7 +79,7 @@ def PHOTOSYNTHESE_simple () :
     eq = valeurs_photosynthese
 
     return eq
-
+"OK"
 
 def RESISTANCES (viscosity, longueur_commune_entrenoeuds, rayon_commun_entrenoeuds) :
     "Equation de la résistance au transport (Minchin et al. 1993)"
@@ -95,7 +92,7 @@ def RESISTANCES (viscosity, longueur_commune_entrenoeuds, rayon_commun_entrenoeu
     "Pas correct pour la suite il faudra corriger l'output pour qu'il s'adapte aux valeurs variables entre conduits"
 
     return eq
-
+"OK"
 
 def FLUX_complet (Ci_m) :
     "Equations de F01 et F02"
@@ -110,7 +107,7 @@ def FLUX_complet (Ci_m) :
     "Ci_m[1] = C1_m HH"
     "Ci_m[2] = C2_m HH"
 
-    # a c'est un array pour correctement naviguer R_ 
+    # a = pour exploiter R_ et Ci_m correctement
     a = np.array([0,3,6])
     # besoin de déclarer eq pour la suite 
     eq = np.empty(0)
@@ -118,46 +115,82 @@ def FLUX_complet (Ci_m) :
         i = a[i]
         denominateur = R_[1+i]*(R_[2+i]+R_[2+i])+R_[2+i]*R_[2+i]
 
-        F01 = Ci_m[0]*((R_[2+i]*(Ci_m[0]-Ci_m[1]) + R_[0+i]*(Ci_m[2]-Ci_m[1])) / denominateur)
-        F02 = Ci_m[0]*((R_[1+i]*(Ci_m[0]-Ci_m[2]) + R_[0+i]*(Ci_m[1]-Ci_m[2])) / denominateur)
+        F01 = Ci_m[0+i]*((R_[2+i]*(Ci_m[0+i]-Ci_m[1+i]) + R_[0+i]*(Ci_m[2+i]-Ci_m[1+i])) / denominateur)
+        F02 = Ci_m[0+i]*((R_[1+i]*(Ci_m[0+i]-Ci_m[2+i]) + R_[0+i]*(Ci_m[1+i]-Ci_m[2+i])) / denominateur)
 
         eq = np.append(eq, (F01,F02))
 
     return eq
+"OK"
 
+def RER () :
+    """Expression du RER"""
 
-def RERi (v, k, Ci_m) :
+    eq = np.array([110, 90, 90], dtype=float)
+    "Valeurs de RER pour le puits 1 aka les organes en croissance"
+
+    return eq
+"OK"
+
+def RER_dynamique (v, k, Ci_m) :
     """Expression du RER"""
 
     eq = (v * Ci_m)/(k + Ci_m)
 
     return eq
+"PAS OK"
 
+def VOLUME () :
+    "Volume fixé"
 
-def VOLUME_simple (Vi, Ci_m) :
-    """Variation du volume des organes, simplifiée"""
-
-    eq = Vi * RERi (v, k, Ci_m)
+    eq = np.append([volume_fixe_feuilles, volume_fixe_bourgeon], dtype=float)
     
     return eq
+"OK"
 
+def VOLUME_dynamique (Vi, v, k, Ci_m) :
+    """Variation du volume des organes, simplifiée"""
 
-def UTILISATION_simple (delta, Vi) :
-    """Equation de l'utilisation, simplifiée"""
+    eq = Vi * RER_dynamique (v, k, Ci_m)
+    
+    return eq
+"PAS OK"
 
-    eq = delta * VOLUME_simple (Vi)
+def UTILISATION (delta, Vi) :
+    "Utilisation simplifiée"
 
+    eq = np.array([236419.6269, 244842.0206, 186507.4465], dtype=float)
+    "Utilisation à tBFV - HH LH LL"
+
+    a = eq/100
+    "Utilisations du puits 2, 100 foix plus basses que celles du puits 1"
+
+    eq = np.append(eq, a)
     return eq 
+"OK"
+
+def UTILISATION_dynamique (delta, Vi, v, k, Ci_m) :
+    "Utilisation avec dynamique de volume"
+
+    eq = delta * VOLUME_dynamique (Vi, v, k, Ci_m)
+
+    return eq
+"PAS OK"
 
 
+
+eq = np.empty(0)
 def A_RESOUDRE (Ci_m, Vi) :
-    """equation à résoudre """
+    """Equation à résoudre """
 
-    C0_m = (PHOTOSYNTHESE_simple() * P) / Vi[0] - FLUX_complet (Ci_m)[0] - FLUX_complet (Ci_m)[2]
-    C1_m = FLUX_complet (Ci_m)[1] - UTILISATION_simple (delta, Vi)[0]
-    C2_m = FLUX_complet (Ci_m)[2] - UTILISATION_simple (delta, Vi)[1]
+    C0_m = (PHOTOSYNTHESE_simple () * P) / Vi - FLUX_complet (Ci_m) - FLUX_complet (Ci_m)
+    eq = np.append(eq, C0_m)
+    C1_m = FLUX_complet (Ci_m) - UTILISATION (delta, Vi)
+    eq = np.append(eq, C1_m)
+    C2_m = FLUX_complet (Ci_m) - UTILISATION (delta, Vi)
+    eq = np.append(eq, C2_m)
 
-    return [C0_m, C1_m, C2_m]
+    return [eq]
 #### FONCTIONS
 
 
