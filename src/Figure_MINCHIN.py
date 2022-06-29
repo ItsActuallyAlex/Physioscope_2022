@@ -3,8 +3,6 @@ import scipy.optimize as scipy
 
 import matplotlib.pyplot as plt
 import numpy as np
-import math
-
 #### MODULES
 
 
