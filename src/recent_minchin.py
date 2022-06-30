@@ -53,7 +53,7 @@ v = np.append(v, v*100)
 
 delta = np.array([1.03453E+13, 1.03453E+13, 1.03453E+13, 1.03453E+13, 1.03453E+13, 1.03453E+13], dtype=float)
 "moyenne des delta à tBFV - HH LH LL - COMMUNE"
-"Attention le delta ici est identique pour les deux puits"
+"Delta identique pour les deux puits"
 # CONSTANTES RER __________
 #### CONSTANTES
 
@@ -341,8 +341,8 @@ Ci_m_t0 = np.append(C1_m_t0, C2_m_t0)
 
 #### RESOLUTION
 # La résolution va nous donner les valeurs de Cm_i dans les puits et la source à t+1
-# Ci_m = scipy.fsolve(A_RESOUDRE, x0=Ci_m_t0, args=(), col_deriv=0, xtol=1.49012e-08, maxfev=0, band=None, epsfcn=None, factor=100, diag=None)
-Ci_m = scipy.fsolve(A_RESOUDRE_UPDATE, x0=Ci_m_t0, args=(C0_m_t0_Sucrose_moyen), col_deriv=0, xtol=1.49012e-08, maxfev=0, band=None, epsfcn=None, factor=100, diag=None)
+Ci_m = scipy.fsolve(A_RESOUDRE, x0=Ci_m_t0, args=(), col_deriv=0, xtol=1.49012e-08, maxfev=0, band=None, epsfcn=None, factor=100, diag=None)
+# Ci_m = scipy.fsolve(A_RESOUDRE_UPDATE, x0=Ci_m_t0, args=(C0_m_t0_Sucrose_moyen), col_deriv=0, xtol=1.49012e-08, maxfev=0, band=None, epsfcn=None, factor=100, diag=None)
 #### RESOLUTION
 
 print(Ci_m)

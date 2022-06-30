@@ -100,5 +100,4 @@ def A_RESOUDRE (Ci_m) :
 conditions_ini = np.array([518.3472222, 0.069444444], dtype=float)
 
 
-Ci_m = scipy.fsolve(A_RESOUDRE, x0=conditions_ini, args=(), col_deriv=0, xtol=1.49012e-08, maxfev=0, band=None, epsfcn=None, factor=100, diag=None)
-
+Ci_m = scipy.fsolve(A_RESOUDRE, x0=conditions_ini, args=(), col_deriv=0, xtol=1.49012e-08, maxfev=0, band=None, epsfcn=None, factor=100, diag=None) 
