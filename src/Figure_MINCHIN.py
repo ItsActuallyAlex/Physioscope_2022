@@ -27,8 +27,8 @@ def F (x_0, C_0) :
     """Flux de C d'une source vers deux organes puits"""
     delta = R_0*(R_1+R_2)+R_1*R_2
 
-    eq_0 = C_0*((R_2*(C_0-x_0[0]) + R_0*(x_0[1]-x_0[0])) / delta)
-    eq_1 = C_0*((R_1*(C_0-x_0[1]) + R_0*(x_0[0]-x_0[1])) / delta)
+    eq_0 = ((R_2*(C_0-x_0[0]) + R_0*(x_0[1]-x_0[0])) / delta)
+    eq_1 = ((R_1*(C_0-x_0[1]) + R_0*(x_0[0]-x_0[1])) / delta)
  
     eq = np.array([eq_0,eq_1])
 
@@ -47,7 +47,7 @@ def U (x_0) :
 
 def equa (x_0, C_0) :
     """Equation d'intérêt"""
-    eq = F(x_0, C_0) - U(x_0)
+    eq = F(x_0, C_0)*C_0 - U(x_0)
 
     return eq
     
@@ -89,7 +89,7 @@ for C_0 in range_C_0 :
     x_result = scipy.fsolve(equa, x0=x_0, args=(C_0), col_deriv=0, xtol=1.49012e-08, maxfev=0, band=None, epsfcn=None, factor=100, diag=None)
 
     ## CREATION ARRAY FLUX
-    fluxes = F(x_result, C_0)
+    fluxes = F(x_result, C_0)*C_0
     valeurs_F1 = np.append(valeurs_F1, fluxes[0])
     valeurs_F2 = np.append(valeurs_F2, fluxes[1])
     F1F2 = np.append(F1F2, rapportF1F2(x_result, C_0))
