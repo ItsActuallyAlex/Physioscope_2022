@@ -1,12 +1,13 @@
 #### MODULES
 import numpy as np
 import math
+import scipy.optimize as scipy
 #### MODULES
 
 #### CONSTANTES QUI VARIENT PAS DU TOUT
-viscosity =
-temp_20 =
-gaz_p = 
+viscosity = 1E6
+temp_20 = 293
+gaz_p = 8.314
 #### CONSTANTES QUI VARIENT PAS DU TOUT
 
 #### CONSTANTES QUI VARIENT ENTRE TRAITEMENTS
@@ -82,6 +83,6 @@ def A_RESOUDRE (longueur_entrenoeuds, rayon_entrenoeuds, C0_m, C1_m, C2_m, delta
 
 for condition in range(3) :
     
-    
-    RESOLUTION via fsolve
+    equilibrre_concentrations = scipy.fsolve(equa, x0=x_0, args=(C_0), col_deriv=0, xtol=1.49012e-08, maxfev=0, band=None, epsfcn=None, factor=100, diag=None)
+
 #### FONCTIONS DU MODELE
