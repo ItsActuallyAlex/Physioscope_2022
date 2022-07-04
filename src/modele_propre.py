@@ -67,7 +67,7 @@ def RER_PUITS (v, k, C1_m, C2_m) :
     return [RER_puits1, RER_puits2]
 
 
-def UTILISATION_CARBONE (delta_masse_volume, volumes_puits1) :
+def UTILISATION_CARBONE (volumes_puits1, delta_masse_volume) :
 
     utilisation_puits1 = delta_masse_volume * VOLUME_PUITS(volumes_puits1)
     utilisation_puits2 = utilisation_puits1/100
@@ -75,7 +75,7 @@ def UTILISATION_CARBONE (delta_masse_volume, volumes_puits1) :
     return [utilisation_puits1, utilisation_puits2]
 
 
-def A_RESOUDRE (longueur_entrenoeuds, rayon_entrenoeuds, C0_m, delta_masse_volume, volumes_puits1, C1_m, C2_m) :
+def A_RESOUDRE (longueur_entrenoeuds, rayon_entrenoeuds, C0_m, C1_m, C2_m, delta_masse_volume, volumes_puits1) :
 
     C1_m_equilibre = C0_m*FLUX_CARBONE(longueur_entrenoeuds, rayon_entrenoeuds, C0_m, C1_m, C2_m) - UTILISATION_CARBONE(delta_masse_volume, volumes_puits1)
     C2_m_equilibre = C0_m*FLUX_CARBONE(longueur_entrenoeuds, rayon_entrenoeuds, C0_m, C1_m, C2_m) - UTILISATION_CARBONE(delta_masse_volume, volumes_puits1)
@@ -87,22 +87,22 @@ def A_RESOUDRE (longueur_entrenoeuds, rayon_entrenoeuds, C0_m, delta_masse_volum
 # print(A_RESOUDRE (longueur_entrenoeuds, rayon_entrenoeuds, C0_m_t0_Sucrose_fitted, C1_m_t0 , C2_m_t0, delta_masse_volume, volumes_puits1))
 
 for condition in range(3) :
-    A = np.array([photosynthese_journaliere[condition]])
-    B = np.array([longueur_entrenoeuds[condition]])
-    C = np.array([rayon_entrenoeuds[condition]])
-    D = np.array([volumes_puits1[condition]])
+    # = np.array([photosynthese_journaliere[condition]])
+    A = np.array([longueur_entrenoeuds[condition]])
+    B = np.array([rayon_entrenoeuds[condition]])
     # C0_m_t0_Sucrose_fitted = np.array([C0_m_t0_Sucrose_fitted[condition]])
-    E = np.array([C0_m_t0_Sucrose_moyen[condition]])
-    F = np.array([C1_m_t0[condition]])
-    G = np.array([C2_m_t0[condition]])
-    # k = np.array([k[condition]])
-    # v = np.array([v[condition]])
-    H = np.array([delta_masse_volume[condition]])
+    C = np.array([C0_m_t0_Sucrose_moyen[condition]])
+    X = np.array([C1_m_t0[condition]])
+    Y = np.array([C2_m_t0[condition]])
+    D = np.array([volumes_puits1[condition]])
+    # = np.array([k[condition]])
+    # = np.array([v[condition]])
+    E = np.array([delta_masse_volume[condition]])
     
+    # X0 = np.append(X, Y)
+    args = A,B,C,D,E
     
-    args = B, C, D, E, H
-    
-    equilibre_concentrations = scipy.fsolve(A_RESOUDRE, x0=(F,G), args=(B, C, D, E, H))
+    equilibre_concentrations = scipy.fsolve(A_RESOUDRE, x0=(X, Y), args=(args))
 
 
 
