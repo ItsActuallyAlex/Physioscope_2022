@@ -73,7 +73,7 @@ def RESISTANCES (longueur_commune_entrenoeuds, rayon_commun_entrenoeuds) :
     eq = np.append(eq, (eq,eq))
 
     return eq
-print("Valeurs resistances : ", RESISTANCES (BASE_longueur_commune_entrenoeuds, BASE_rayon_commun_entrenoeuds))
+# print("Valeurs resistances : ", RESISTANCES (BASE_longueur_commune_entrenoeuds, BASE_rayon_commun_entrenoeuds))
 
 def FLUX_2puits (C1_m, C2_m, C0_m, longueur_commune_entrenoeuds, rayon_commun_entrenoeuds) :
 
@@ -145,7 +145,7 @@ for condition, nom_condition in enumerate(nom_conditions) :
     C1_m_t0 = BASE_conc_ini_C1[condition]
     C2_m_t0 = BASE_conc_ini_C2[condition]
 
-    conditions_ini_C1C2 = np.append(C1_m_t0[condition], C2_m_t0[condition])
+    conditions_ini_C1C2 = np.array([C1_m_t0, C2_m_t0])
 
     # increment_C1 = np.array([0, 2, 4], dtype=int)
     # increment_C2 = np.array([1, 3, 5], dtype=int)
@@ -153,7 +153,7 @@ for condition, nom_condition in enumerate(nom_conditions) :
     # print("PRINT INCREMENT C1 :", BASE_conditions_ini_C1C2[increment_C1[condition]])
     # print("PRINT INCREMENT C2 :", BASE_conditions_ini_C1C2[increment_C2[condition]])
 
-    dCi_m_dt = scipy.fsolve(A_RESOUDRE, x0=conditions_ini_C1C2, args=(concentration_0, longueur_commune_entrenoeuds, rayon_commun_entrenoeuds, coef_delta_feuilles, coef_delta_bourgeon, volume_fixe_feuilles, volume_fixe_bourgeon, v_1, k_1, v_2, k_2), col_deriv=0, xtol=1.49012e-08, maxfev=0, band=None, epsfcn=None, factor=100, diag=None) 
+    dCi_m_dt = scipy.fsolve(A_RESOUDRE, x0=(conditions_ini_C1C2), args=(concentration_0, longueur_commune_entrenoeuds, rayon_commun_entrenoeuds, coef_delta_feuilles, coef_delta_bourgeon, volume_fixe_feuilles, volume_fixe_bourgeon, v_1, k_1, v_2, k_2), col_deriv=0, xtol=1.49012e-08, maxfev=0, band=None, epsfcn=None, factor=100, diag=None) 
     print("Les solutions à l'équilibre C1_m et C2_m pour la condition",nom_condition[condition], "sont :", dCi_m_dt)
 
 print("FIN LOOP CONDITION _________________________")
