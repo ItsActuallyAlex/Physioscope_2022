@@ -101,7 +101,7 @@ def RER (C1_m, C2_m, v_1, k_1, v_2, k_2) :
     return eq
 # print("Valeurs RER : ", RER (BASE_valeurs_RER_bourgeon, BASE_valeurs_RER_feuilles))
 
-def UTILISATION (coef_delta_feuilles, coef_delta_bourgeon, volume_fixe_feuilles, volume_fixe_bourgeon, C1_m, C2_m, v_1, k_1, v_2, k_2) :
+def UTILISATION ( C1_m, C2_m, coef_delta_feuilles, coef_delta_bourgeon, volume_fixe_feuilles, volume_fixe_bourgeon, v_1, k_1, v_2, k_2) :
     
     U1 = coef_delta_feuilles * volume_fixe_feuilles * RER (C1_m, C2_m, v_1, k_1, v_2, k_2)[0]
     U2 = coef_delta_bourgeon * volume_fixe_bourgeon * RER (C1_m, C2_m, v_1, k_1, v_2, k_2)[1]
@@ -113,7 +113,7 @@ def UTILISATION (coef_delta_feuilles, coef_delta_bourgeon, volume_fixe_feuilles,
 
 def A_RESOUDRE (C1_m, C2_m, C0_m, longueur_commune_entrenoeuds, rayon_commun_entrenoeuds, coef_delta_feuilles, coef_delta_bourgeon, volume_fixe_feuilles, volume_fixe_bourgeon, v_1, k_1, v_2, k_2) :
 
-    dCi_m_dt = C0_m*FLUX_2puits (C1_m, C2_m, C0_m, longueur_commune_entrenoeuds, rayon_commun_entrenoeuds) - UTILISATION (coef_delta_feuilles, coef_delta_bourgeon, volume_fixe_feuilles, volume_fixe_bourgeon, C1_m, C2_m, v_1, k_1, v_2, k_2)
+    dCi_m_dt = C0_m*FLUX_2puits (C1_m, C2_m, C0_m, longueur_commune_entrenoeuds, rayon_commun_entrenoeuds) - UTILISATION (C1_m, C2_m, coef_delta_feuilles, coef_delta_bourgeon, volume_fixe_feuilles, volume_fixe_bourgeon, v_1, k_1, v_2, k_2)
 
     return dCi_m_dt
 #### FONCTIONS
@@ -147,11 +147,13 @@ for condition, nom_condition in enumerate(nom_conditions) :
 
     conditions_ini_C1C2 = np.array([C1_m_t0, C2_m_t0])
 
+    # print("AAAAA",conditions_ini_C1C2)
     # increment_C1 = np.array([0, 2, 4], dtype=int)
     # increment_C2 = np.array([1, 3, 5], dtype=int)
     # conditions_ini_C1C2 = np.append(BASE_conditions_ini_C1C2[increment_C1[condition]], BASE_conditions_ini_C1C2[increment_C2[condition]])
     # print("PRINT INCREMENT C1 :", BASE_conditions_ini_C1C2[increment_C1[condition]])
     # print("PRINT INCREMENT C2 :", BASE_conditions_ini_C1C2[increment_C2[condition]])
+    # print("AAAAA",conditions_ini_C1C2)
 
     dCi_m_dt = scipy.fsolve(A_RESOUDRE, x0=(conditions_ini_C1C2), args=(concentration_0, longueur_commune_entrenoeuds, rayon_commun_entrenoeuds, coef_delta_feuilles, coef_delta_bourgeon, volume_fixe_feuilles, volume_fixe_bourgeon, v_1, k_1, v_2, k_2), col_deriv=0, xtol=1.49012e-08, maxfev=0, band=None, epsfcn=None, factor=100, diag=None) 
     print("Les solutions à l'équilibre C1_m et C2_m pour la condition",nom_condition[condition], "sont :", dCi_m_dt)
