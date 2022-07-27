@@ -17,45 +17,19 @@ delta = 1.379E+10
 #### CONSTANTES VRAIMENT CONSTANTES
 
 #### VARIABLES ENTRE CONDITIONS
-# BASE_valeur_photosynthese = np.array([429859.7489], dtype=float)
-# BASE_longueur_commune_entrenoeuds = np.array([2.91047327E-2], dtype=float)
-# BASE_rayon_commun_entrenoeuds = np.array([5.1E-6], dtype=float)
-# # Valeur moyenne de rayon Minchin
-# BASE_C_0 = np.array([360], dtype=float)
-# BASE_valeurs_RER_bourgeon = np.array([110], dtype=float)
-# BASE_valeurs_RER_feuilles = np.array([110], dtype=float)
-# BASE_volume_fixe_bourgeon = np.array([formule_cone], dtype=float)
-# BASE_volume_fixe_feuilles = np.array([1.79192E-06], dtype=float)
-# BASE_coef_delta_feuilles = np.array([1.03453E+13], dtype=float)
-# BASE_coef_delta_bourgeon = np.array([1.03453E+13], dtype=float)
 
-# conditions_ini_C1C2 = np.array([518.3472222, 0.069444444], dtype=float)
-
-# BASE_valeur_photosynthese = np.array([429859.7489, 641689.2869, 237700.9616], dtype=float)
 BASE_longueur_commune_entrenoeuds = np.array([0.02732, 0.02732, 0.02732], dtype=float)
 BASE_rayon_commun_entrenoeuds = np.array([35.1E-6, 35.1E-6, 35.1E-6], dtype=float)
-# Valeur moyenne de rayon Minchin
 
-# BASE_valeurs_RER_bourgeon = np.array([110, 90, 90], dtype=float)
-# BASE_valeurs_RER_feuilles = np.array([110, 90, 90], dtype=float)
 BASE_volume_fixe_bourgeon = np.array([8,849E-10, 8,849E-10, 8,849E-10], dtype=float)
 BASE_volume_fixe_feuilles = np.array([1.515E-07, 2.096E-07, 3.027E-07], dtype=float)
 
-
-# BASE_coef_delta_feuilles = np.array([1.379E+10, 1.379E+10, 1.379E+10], dtype=float)
-# BASE_coef_delta_bourgeon = np.array([1.379E+10, 1.379E+10, 1.379E+10], dtype=float)
 BASE_v1 = np.array([1.993E-02, 1.884E-02, 1.777E-02], dtype=float)
 BASE_k1 = np.array([1.069E+12, 1.566E+12, 9.148E+11], dtype=float)
 BASE_v2 = np.array([9.617E-11, 9.617E-11, 9.617E-11], dtype=float)
 BASE_k2 = np.array([2.099E+12, 2.099E+12, 2.099E+12], dtype=float)
 
-
-# BASE_vi = np.array([220, 220, 180, 180, 180, 180], dtype=float)
-# BASE_ki = np.array([405.197, 405.197,397.561, 397.561, 357.624,  357.624], dtype=float)
-# BASE_conditions_ini_C1C2_équivalentCARBONE = np.array([7.775208333, , 7.186006944, , 7.186006944], dtype=float) 
-
 BASE_C_0 = np.array([6.619E+10, 4.723E+11, 5.972E+10], dtype=float)
-# BASE_conditions_ini_C1C2 = np.array([518.3472222, 0.069444444, 479.0671296, 0.069444444, 479.0671296, 0.069444444], dtype=float)
 BASE_conc_ini_C1 = np.array([5.344E+11, 7.829E+11, 4.574E+11], dtype=float)
 BASE_conc_ini_C2 = np.array([1.04937E+12, 1.04937E+12, 1.04937E+12], dtype=float)
 #### VARIABLES ENTRE CONDITIONS
