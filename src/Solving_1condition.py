@@ -18,18 +18,18 @@ delta = 1.379E+10
 
 #### VARIABLES ENTRE CONDITIONS
 
-BASE_longueur_commune_entrenoeuds = np.array([0.02732, 0.02732, 0.02732], dtype=float)
-BASE_rayon_commun_entrenoeuds = np.array([35.1E-6, 35.1E-6, 35.1E-6], dtype=float)
+BASE_longueur_commune_entrenoeuds = np.array([4.339E-2, 4.339E-2, 4.339E-2], dtype=float)
+BASE_rayon_commun_entrenoeuds = np.array([1.977E-5, 1.977E-5, 1.977E-5], dtype=float)
 
-BASE_volume_fixe_bourgeon = np.array([8,849E-10, 8,849E-10, 8,849E-10], dtype=float)
-BASE_volume_fixe_feuilles = np.array([1.515E-07, 2.096E-07, 3.027E-07], dtype=float)
+BASE_volume_ini_bourgeon = np.array([8,849E-10, 8,849E-10, 8,849E-10], dtype=float)
+BASE_volume_ini_feuilles = np.array([1.063E-6, 1.063E-6, 1.063E-6], dtype=float)
 
-BASE_v1 = np.array([1.993E-02, 1.884E-02, 1.777E-02], dtype=float)
-BASE_k1 = np.array([1.069E+12, 1.566E+12, 9.148E+11], dtype=float)
-BASE_v2 = np.array([9.617E-11, 9.617E-11, 9.617E-11], dtype=float)
+BASE_v1 = np.array([1.779E-02, 1.012E-02, 1.440E-02], dtype=float)
+BASE_k1 = np.array([1.183E12, 1.183E12, 1.183E12], dtype=float)
+BASE_v2 = np.array([6.510E-2, 4.510E-2, 4.510E-2], dtype=float)
 BASE_k2 = np.array([2.099E+12, 2.099E+12, 2.099E+12], dtype=float)
 
-BASE_C_0 = np.array([6.619E+10, 4.723E+11, 5.972E+10], dtype=float)
+BASE_conc_ini_C0 = np.array([6.619E+10, 4.723E+11, 5.972E+10], dtype=float)
 BASE_conc_ini_C1 = np.array([5.344E+11, 7.829E+11, 4.574E+11], dtype=float)
 BASE_conc_ini_C2 = np.array([1.04937E+12, 1.04937E+12, 1.04937E+12], dtype=float)
 #### VARIABLES ENTRE CONDITIONS
@@ -102,7 +102,7 @@ for condition, nom_condition in enumerate(nom_conditions) :
     # print("longueur_commune_entrenoeuds",longueur_commune_entrenoeuds)
     rayon_commun_entrenoeuds = BASE_rayon_commun_entrenoeuds[condition]
     # print("rayon_commun_entrenoeuds",rayon_commun_entrenoeuds)
-    concentration_0 = BASE_C_0[condition]
+    concentration_0 = BASE_conc_ini_C0[condition]
     # print("concentration_0", concentration_0)
     # coef_delta_feuilles = BASE_coef_delta_feuilles[condition]
     # coef_delta_bourgeon = BASE_coef_delta_bourgeon[condition]
@@ -110,7 +110,7 @@ for condition, nom_condition in enumerate(nom_conditions) :
     # print("coef_delta",coef_delta)
     # volume_fixe_feuilles = BASE_volume_fixe_feuilles[condition]
     # volume_fixe_bourgeon = BASE_volume_fixe_bourgeon[condition]
-    volume_i = np.append(BASE_volume_fixe_bourgeon[condition],BASE_volume_fixe_feuilles[condition])
+    volume_i = np.append(BASE_volume_ini_bourgeon[condition],BASE_volume_ini_feuilles[condition])
     # print("volume_i", volume_i)
     v_i = np.append(BASE_v1[condition], BASE_v2[condition])
     # print("v_i",v_i)
