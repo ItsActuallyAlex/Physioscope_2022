@@ -165,11 +165,11 @@ print("FIN LOOP CONDITION _________________________")
 
 
 #### PLOTTING
-fig,ax = plt.subplots(2,3)
+fig,ax = plt.subplots(2,4)
 
 # PLOTTING CONCENTRATIONS
-ax[0,0].plot(range(3), C1_m, color="red", marker="+")
-ax[1,0].plot(range(3), C2_m, color="red", marker="+")
+ax[0,0].plot(range(3), C1_m, color="green", marker="+")
+ax[1,0].plot(range(3), C2_m, color="green", marker="+")
 
 ax[0,0].set_title("C1_m et C2_m à l'équilibre")
 ax[0,0].set_xlabel("HH LH LL", color="black", fontsize=14)
@@ -186,17 +186,25 @@ ax[0,1].set_ylabel("RER /°Cj", color="black", fontsize=14)
 # PLOTTING RER
 
 # PLOTTING UTILISATION
-ax[0,2].plot(range(3), U1, color="blue", marker="+")
-ax[1,2].plot(range(3), U2, color="blue", marker="+")
+ax[0,2].plot(range(3), U1, color="green", marker="+")
+ax[1,2].plot(range(3), U2, color="green", marker="+")
 
 ax[0,2].set_title("U1 et U2 à l'équilibre")
 ax[0,2].set_xlabel("HH LH LL", color="black", fontsize=14)
 ax[0,2].set_ylabel("umolC /°Cj", color="black", fontsize=14)
 # PLOTTING UTILISATION
 
+# PLOTTING FLUX
+ax[0,3].plot(range(3), U1, color="green", marker="+")
+ax[1,3].plot(range(3), U2, color="green", marker="+")
 
-
+ax[0,3].set_title("U1 et U2 à l'équilibre")
+ax[0,3].set_xlabel("HH LH LL", color="black", fontsize=14)
+ax[0,3].set_ylabel("umolC /°Cj", color="black", fontsize=14)
+# PLOTTING FLUX
 #### PLOTTING
+
+
 
 
 
