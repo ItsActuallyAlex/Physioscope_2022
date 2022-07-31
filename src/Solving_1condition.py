@@ -142,14 +142,21 @@ for condition, nom_condition in enumerate(nom_conditions) :
     RER1 = np.append(RER1, RER (dCi_m_dt, v_i, k_i)[0])
     RER2 = np.append(RER2, RER (dCi_m_dt, v_i, k_i)[1])
 
-    U1 = np.append(U1,UTILISATION (dCi_m_dt, volume_ini[0], v_i, k_i))
-    U2 = np.append(U2, UTILISATION (dCi_m_dt, volume_ini[1], v_i, k_i))
+    U1 = np.append(U1,UTILISATION (dCi_m_dt, volume_ini[0], v_i, k_i)[0])
+    U2 = np.append(U2, UTILISATION (dCi_m_dt, volume_ini[1], v_i, k_i)[1])
 
-    U1 = np.append(F01, FLUX_2puits (dCi_m_dt, C0_m_t0, longueur_entrenoeuds, rayon_entrenoeuds)[0])
-    U2 = np.append(F02, FLUX_2puits (dCi_m_dt, C0_m_t0, longueur_entrenoeuds, rayon_entrenoeuds)[1])
+    F1 = np.append(F01, FLUX_2puits (dCi_m_dt, C0_m_t0, longueur_entrenoeuds, rayon_entrenoeuds)[0])
+    F2 = np.append(F02, FLUX_2puits (dCi_m_dt, C0_m_t0, longueur_entrenoeuds, rayon_entrenoeuds)[1])
 
     print("RER1",RER1)
     print("RER2",RER2)
+
+    print("U1", U1)
+    print("U2", U2)
+
+    print("F01", F01)
+    print("F02", F02)
+
 
     print("__________________________")
 print("FIN LOOP CONDITION _________________________")
@@ -162,7 +169,7 @@ fig,ax = plt.subplots(2,3)
 
 # PLOTTING CONCENTRATIONS
 ax[0,0].plot(range(3), C1_m, color="red", marker="+")
-ax[1,0].plot(range(3), C2_m, color="blue", marker="+")
+ax[1,0].plot(range(3), C2_m, color="red", marker="+")
 
 ax[0,0].set_title("C1_m et C2_m à l'équilibre")
 ax[0,0].set_xlabel("HH LH LL", color="black", fontsize=14)
@@ -170,22 +177,22 @@ ax[0,0].set_ylabel("Concentration en umolC/m3", color="black", fontsize=14)
 # PLOTTING CONCENTRATIONS
 
 # PLOTTING RER
-ax[0,1].plot(range(3), RER1, color="red", marker="+")
-ax[1,1].plot(range(3), RER2, color="blue", marker="+")
+ax[0,1].plot(range(3), RER1, color="green", marker="+")
+ax[1,1].plot(range(3), RER2, color="green", marker="+")
 
 ax[0,1].set_title("RER1 et RER2 à l'équilibre")
 ax[0,1].set_xlabel("HH LH LL", color="black", fontsize=14)
 ax[0,1].set_ylabel("RER /°Cj", color="black", fontsize=14)
 # PLOTTING RER
 
-# PLOTTING RER
-# ax[0,1].plot(range(3), RER1, color="red", marker="+")
-# ax[1,1].plot(range(3), RER2, color="blue", marker="+")
+# PLOTTING UTILISATION
+ax[0,2].plot(range(3), U1, color="blue", marker="+")
+ax[1,2].plot(range(3), U2, color="blue", marker="+")
 
-# ax[0,2].set_title("U1 et U2 à l'équilibre")
-# ax[0,2].set_xlabel("HH LH LL", color="black", fontsize=14)
-# ax[0,2].set_ylabel("RER /°Cj", color="black", fontsize=14)
-# PLOTTING RER
+ax[0,2].set_title("U1 et U2 à l'équilibre")
+ax[0,2].set_xlabel("HH LH LL", color="black", fontsize=14)
+ax[0,2].set_ylabel("umolC /°Cj", color="black", fontsize=14)
+# PLOTTING UTILISATION
 
 
 
