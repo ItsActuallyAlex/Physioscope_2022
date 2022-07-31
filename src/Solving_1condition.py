@@ -14,70 +14,56 @@ viscosity = 1E6
 nom_conditions = np.array(["HH", "LH", "LL"], dtype=str)
 
 delta = 1.379E+10
+
+C1_m = np.empty(0)
+C2_m = np.empty(0)
+
+RER1 = np.empty(0)
+RER2 = np.empty(0)
+
+U1 = np.empty(0)
+U2 = np.empty(0)
+
+F01 = np.empty(0)
+F02 = np.empty(0)
 #### CONSTANTES VRAIMENT CONSTANTES
 
 #### VARIABLES ENTRE CONDITIONS
-# BASE_valeur_photosynthese = np.array([429859.7489], dtype=float)
-# BASE_longueur_commune_entrenoeuds = np.array([2.91047327E-2], dtype=float)
-# BASE_rayon_commun_entrenoeuds = np.array([5.1E-6], dtype=float)
-# # Valeur moyenne de rayon Minchin
-# BASE_C_0 = np.array([360], dtype=float)
-# BASE_valeurs_RER_bourgeon = np.array([110], dtype=float)
-# BASE_valeurs_RER_feuilles = np.array([110], dtype=float)
-# BASE_volume_fixe_bourgeon = np.array([formule_cone], dtype=float)
-# BASE_volume_fixe_feuilles = np.array([1.79192E-06], dtype=float)
-# BASE_coef_delta_feuilles = np.array([1.03453E+13], dtype=float)
-# BASE_coef_delta_bourgeon = np.array([1.03453E+13], dtype=float)
+BASE_photosynthese = np.array([6.978E+2, 6.978E+2, 6.978E+2], dtype=float)
 
-# conditions_ini_C1C2 = np.array([518.3472222, 0.069444444], dtype=float)
+BASE_longueur_entrenoeuds = np.array([4.339E-2, 4.339E-2, 4.339E-2], dtype=float)
+BASE_rayon_entrenoeuds = np.array([35.1E-6, 35.1E-6, 35.1E-6], dtype=float)
 
-# BASE_valeur_photosynthese = np.array([429859.7489, 641689.2869, 237700.9616], dtype=float)
-BASE_longueur_commune_entrenoeuds = np.array([0.02732, 0.02732, 0.02732], dtype=float)
-BASE_rayon_commun_entrenoeuds = np.array([35.1E-6, 35.1E-6, 35.1E-6], dtype=float)
-# Valeur moyenne de rayon Minchin
+BASE_volume_ini_bourgeon = np.array([8,849E-10, 8,849E-10, 8,849E-10], dtype=float)
+BASE_volume_ini_feuilles = np.array([1.063E-06, 1.063E-06, 1.063E-06], dtype=float)
 
-# BASE_valeurs_RER_bourgeon = np.array([110, 90, 90], dtype=float)
-# BASE_valeurs_RER_feuilles = np.array([110, 90, 90], dtype=float)
-BASE_volume_fixe_bourgeon = np.array([8,849E-10, 8,849E-10, 8,849E-10], dtype=float)
-BASE_volume_fixe_feuilles = np.array([1.515E-07, 2.096E-07, 3.027E-07], dtype=float)
-
-
-# BASE_coef_delta_feuilles = np.array([1.379E+10, 1.379E+10, 1.379E+10], dtype=float)
-# BASE_coef_delta_bourgeon = np.array([1.379E+10, 1.379E+10, 1.379E+10], dtype=float)
-BASE_v1 = np.array([1.993E-02, 1.884E-02, 1.777E-02], dtype=float)
-BASE_k1 = np.array([1.069E+12, 1.566E+12, 9.148E+11], dtype=float)
-BASE_v2 = np.array([9.617E-11, 9.617E-11, 9.617E-11], dtype=float)
+BASE_v1 = np.array([1.779E-02, 1.012E-02, 1.440E-02], dtype=float)
+BASE_k1 = np.array([1.183E+12, 1.183E+12, 1.183E+12], dtype=float)
+BASE_v2 = np.array([6.510E-2, 4.510E-2, 4.510E-2], dtype=float)
 BASE_k2 = np.array([2.099E+12, 2.099E+12, 2.099E+12], dtype=float)
 
-
-# BASE_vi = np.array([220, 220, 180, 180, 180, 180], dtype=float)
-# BASE_ki = np.array([405.197, 405.197,397.561, 397.561, 357.624,  357.624], dtype=float)
-# BASE_conditions_ini_C1C2_équivalentCARBONE = np.array([7.775208333, , 7.186006944, , 7.186006944], dtype=float) 
-
-BASE_C_0 = np.array([6.619E+10, 4.723E+11, 5.972E+10], dtype=float)
-# BASE_conditions_ini_C1C2 = np.array([518.3472222, 0.069444444, 479.0671296, 0.069444444, 479.0671296, 0.069444444], dtype=float)
+BASE_conc_ini_C0 = np.array([6.619E+10, 4.723E+11, 5.972E+10], dtype=float)
 BASE_conc_ini_C1 = np.array([5.344E+11, 7.829E+11, 4.574E+11], dtype=float)
-BASE_conc_ini_C2 = np.array([1.04937E+12, 1.04937E+12, 1.04937E+12], dtype=float)
+BASE_conc_ini_C2 = np.array([1.049E+12, 1.049E+12, 1.049E+12], dtype=float)
 #### VARIABLES ENTRE CONDITIONS
 
 #### FONCTIONS
-def RESISTANCES (longueur_commune_entrenoeuds, rayon_commun_entrenoeuds) :
+def RESISTANCES (longueur_entrenoeuds, rayon_entrenoeuds) :
 
     # Particule qui ne varie pas
     constante_resistance =  (8*viscosity)/(math.pi * temp_20 * gaz_p) 
 
     # calcul de la résistance
-    eq = constante_resistance * (longueur_commune_entrenoeuds)/(rayon_commun_entrenoeuds**4)
+    eq = constante_resistance * (longueur_entrenoeuds)/(rayon_entrenoeuds**4)
 
     # 3 fois la même valeur R0 R1 R2
     eq = np.append(eq, (eq,eq))
 
     return eq
-# print("Valeurs resistances : ", RESISTANCES (BASE_longueur_commune_entrenoeuds, BASE_rayon_commun_entrenoeuds))
 
-def FLUX_2puits (Ci_m, C0_m, longueur_commune_entrenoeuds, rayon_commun_entrenoeuds) :
+def FLUX_2puits (Ci_m, C0_m, longueur_entrenoeuds, rayon_entrenoeuds) :
 
-    R_ = RESISTANCES (longueur_commune_entrenoeuds, rayon_commun_entrenoeuds)
+    R_ = RESISTANCES (longueur_entrenoeuds, rayon_entrenoeuds)
     R_0 = R_[0]
     R_1 = R_[1]
     R_2 = R_[2]
@@ -89,109 +75,118 @@ def FLUX_2puits (Ci_m, C0_m, longueur_commune_entrenoeuds, rayon_commun_entrenoe
     eq = np.append(F01,F02)
 
     return eq
-# print("Valeurs flux : ", FLUX_2puits (BASE_conditions_ini_C1C2, BASE_C_0, BASE_longueur_commune_entrenoeuds, BASE_rayon_commun_entrenoeuds))
 
 def RER (Ci_m, v_i, k_i) :
     
     eq = (v_i * Ci_m)/(k_i + Ci_m)
 
     return eq
-# print("Valeurs RER : ", RER (BASE_valeurs_RER_bourgeon, BASE_valeurs_RER_feuilles))
 
 def UTILISATION (Ci_m, volume_i, v_i, k_i) :
     
     eq = delta * volume_i * RER (Ci_m, v_i, k_i)
 
     return eq
-# print("Valeurs utilisation : ", UTILISATION (BASE_coef_delta_feuilles, BASE_coef_delta_bourgeon, BASE_volume_fixe_feuilles, BASE_volume_fixe_bourgeon, BASE_valeurs_RER_bourgeon, BASE_valeurs_RER_feuilles))
 
-def A_RESOUDRE (Ci_m, C0_m, longueur_commune_entrenoeuds, rayon_commun_entrenoeuds, volume_i, v_i, k_i) :
+def A_RESOUDRE (Ci_m, C0_m, longueur_entrenoeuds, rayon_entrenoeuds, volume_i, v_i, k_i) :
 
-    dCi_m_dt = C0_m*FLUX_2puits (Ci_m, C0_m, longueur_commune_entrenoeuds, rayon_commun_entrenoeuds) - UTILISATION (Ci_m, volume_i, v_i, k_i)
+    dCi_m_dt = C0_m*FLUX_2puits (Ci_m, C0_m, longueur_entrenoeuds, rayon_entrenoeuds) - UTILISATION (Ci_m, volume_i, v_i, k_i)
 
     return dCi_m_dt
 #### FONCTIONS
 
-# condition[0] = HH
-# condition[1] = LH
-# condition[2] = LL
+# #### PRINT VALEURS INI
+# print("UTILISATION", UTILISATION (Ci_m, volume_i, v_i, k_i))
+# print("FLUX", FLUX_2puits (Ci_m, C0_m, longueur_entrenoeuds, rayon_entrenoeuds))
+# print("RER", RER (Ci_m, v_i, k_i))
+# print("VOLUME", )
+# #### PRINT VALEURS INI
 
-C1_m = np.empty(0)
-C2_m = np.empty(0)
 
 
-
-print("DEBUT LOOP CONDITION _________________________")
+# print("DEBUT LOOP CONDITION _________________________")
 for condition, nom_condition in enumerate(nom_conditions) : 
 
-    longueur_commune_entrenoeuds = BASE_longueur_commune_entrenoeuds[condition]
-    # print("longueur_commune_entrenoeuds",longueur_commune_entrenoeuds)
-    rayon_commun_entrenoeuds = BASE_rayon_commun_entrenoeuds[condition]
-    # print("rayon_commun_entrenoeuds",rayon_commun_entrenoeuds)
-    concentration_0 = BASE_C_0[condition]
-    # print("concentration_0", concentration_0)
-    # coef_delta_feuilles = BASE_coef_delta_feuilles[condition]
-    # coef_delta_bourgeon = BASE_coef_delta_bourgeon[condition]
-    # coef_delta = np.append(BASE_coef_delta_feuilles[condition], BASE_coef_delta_bourgeon[condition])
-    # print("coef_delta",coef_delta)
-    # volume_fixe_feuilles = BASE_volume_fixe_feuilles[condition]
-    # volume_fixe_bourgeon = BASE_volume_fixe_bourgeon[condition]
-    volume_i = np.append(BASE_volume_fixe_bourgeon[condition],BASE_volume_fixe_feuilles[condition])
-    # print("volume_i", volume_i)
+    longueur_entrenoeuds = BASE_longueur_entrenoeuds[condition]
+    rayon_entrenoeuds = BASE_rayon_entrenoeuds[condition]
+
+    volume_ini = np.append(BASE_volume_ini_bourgeon[condition],BASE_volume_ini_feuilles[condition])
+
     v_i = np.append(BASE_v1[condition], BASE_v2[condition])
-    # print("v_i",v_i)
     k_i = np.append(BASE_k1[condition], BASE_k2[condition])
-    # print("k_i",k_i)
-    # valeurs_RER_bourgeon = BASE_valeurs_RER_bourgeon[condition]
-    # valeurs_RER_feuilles = BASE_valeurs_RER_feuilles[condition]
+
+    C0_m_t0 = BASE_conc_ini_C0[condition]
     C1_m_t0 = BASE_conc_ini_C1[condition]
     C2_m_t0 = BASE_conc_ini_C2[condition]
 
     conditions_ini_C1C2 = np.array([C1_m_t0, C2_m_t0])
 
-    # print("AAAAA",conditions_ini_C1C2)
-    # increment_C1 = np.array([0, 2, 4], dtype=int)
-    # increment_C2 = np.array([1, 3, 5], dtype=int)
-    # conditions_ini_C1C2 = np.append(BASE_conditions_ini_C1C2[increment_C1[condition]], BASE_conditions_ini_C1C2[increment_C2[condition]])
-    # print("PRINT INCREMENT C1 :", BASE_conditions_ini_C1C2[increment_C1[condition]])
-    # print("PRINT INCREMENT C2 :", BASE_conditions_ini_C1C2[increment_C2[condition]])
-    # print("AAAAA",conditions_ini_C1C2)
+    # print("__________________________")
+    # print("FLUX", FLUX_2puits (conditions_ini_C1C2, C0_m_t0, longueur_entrenoeuds, rayon_entrenoeuds))
+    # print("UTILISATION", UTILISATION(conditions_ini_C1C2, volume_ini, v_i, k_i))
+    # print("RER", RER (conditions_ini_C1C2, v_i, k_i))
 
 
-    print("FLUX", FLUX_2puits (conditions_ini_C1C2, concentration_0, longueur_commune_entrenoeuds, rayon_commun_entrenoeuds))
-    print("UTILISATION", UTILISATION(conditions_ini_C1C2, volume_i, v_i, k_i))
-    print("RER", RER (conditions_ini_C1C2, v_i, k_i))
-
-    dCi_m_dt = scipy.fsolve(A_RESOUDRE, x0=(conditions_ini_C1C2), args=(concentration_0, longueur_commune_entrenoeuds, rayon_commun_entrenoeuds, volume_i, v_i, k_i), col_deriv=0, xtol=1.49012e-08, maxfev=0, band=None, epsfcn=None, factor=100, diag=None) 
+    dCi_m_dt = scipy.fsolve(A_RESOUDRE, x0=(conditions_ini_C1C2), args=(C0_m_t0, longueur_entrenoeuds, rayon_entrenoeuds, volume_ini, v_i, k_i), col_deriv=0, xtol=1.49012e-08, maxfev=0, band=None, epsfcn=None, factor=100, diag=None) 
     print("Les solutions à l'équilibre C1_m et C2_m pour la condition", nom_conditions[condition], "sont :", dCi_m_dt)
 
-    print("FLUX EQUILIBRE", FLUX_2puits (dCi_m_dt, concentration_0, longueur_commune_entrenoeuds, rayon_commun_entrenoeuds))
-    print("UTILISATION EQUILIBRE", UTILISATION(dCi_m_dt, volume_i, v_i, k_i))
-    print("RER EQUILIBRE", RER (dCi_m_dt, v_i, k_i))
-    print("______________")
+    # print("FLUX EQUILIBRE", FLUX_2puits (dCi_m_dt, C0_m_t0, longueur_entrenoeuds, rayon_entrenoeuds))
+    # print("UTILISATION EQUILIBRE", UTILISATION(dCi_m_dt, volume_ini, v_i, k_i))
+    # print("RER EQUILIBRE", RER (dCi_m_dt, v_i, k_i))
+    # print("______________")
+
 
     C1_m = np.append(C1_m, dCi_m_dt[0])
     C2_m = np.append(C2_m, dCi_m_dt[1])
 
+    RER1 = np.append(RER1, RER (dCi_m_dt, v_i, k_i)[0])
+    RER2 = np.append(RER2, RER (dCi_m_dt, v_i, k_i)[1])
+
+    U1 = np.append(U1,UTILISATION (dCi_m_dt, volume_ini[0], v_i, k_i))
+    U2 = np.append(U2, UTILISATION (dCi_m_dt, volume_ini[1], v_i, k_i))
+
+    U1 = np.append(F01, FLUX_2puits (dCi_m_dt, C0_m_t0, longueur_entrenoeuds, rayon_entrenoeuds)[0])
+    U2 = np.append(F02, FLUX_2puits (dCi_m_dt, C0_m_t0, longueur_entrenoeuds, rayon_entrenoeuds)[1])
+
+    print("RER1",RER1)
+    print("RER2",RER2)
+
+    print("__________________________")
 print("FIN LOOP CONDITION _________________________")
 
 
 
 
 #### PLOTTING
-fig,ax = plt.subplots(2)
+fig,ax = plt.subplots(2,3)
 
-# ax[0].plot(range(3), BASE_conc_ini_C1, color="black", marker="+")
-# ax[1].plot(range(3), BASE_conc_ini_C2, color="black", marker="+")
+# PLOTTING CONCENTRATIONS
+ax[0,0].plot(range(3), C1_m, color="red", marker="+")
+ax[1,0].plot(range(3), C2_m, color="blue", marker="+")
 
-# ax[0].plot(range(3), BASE_C_0 , color="black", marker="+")
-# ax[1].plot(range(3), BASE_C_0 , color="black", marker="+")
-ax[0].plot(range(3), C1_m, color="red", marker="+")
-ax[1].plot(range(3), C2_m, color="blue", marker="+")
+ax[0,0].set_title("C1_m et C2_m à l'équilibre")
+ax[0,0].set_xlabel("HH LH LL", color="black", fontsize=14)
+ax[0,0].set_ylabel("Concentration en umolC/m3", color="black", fontsize=14)
+# PLOTTING CONCENTRATIONS
 
-ax[0].set_title("C1_m et C2_m à l'équilibre")
-ax[0].set_xlabel("HH LH LL", color="black", fontsize=14)
-ax[0].set_ylabel("Concentration en umolC/m3", color="black", fontsize=14)
+# PLOTTING RER
+ax[0,1].plot(range(3), RER1, color="red", marker="+")
+ax[1,1].plot(range(3), RER2, color="blue", marker="+")
+
+ax[0,1].set_title("RER1 et RER2 à l'équilibre")
+ax[0,1].set_xlabel("HH LH LL", color="black", fontsize=14)
+ax[0,1].set_ylabel("RER /°Cj", color="black", fontsize=14)
+# PLOTTING RER
+
+# PLOTTING RER
+# ax[0,1].plot(range(3), RER1, color="red", marker="+")
+# ax[1,1].plot(range(3), RER2, color="blue", marker="+")
+
+# ax[0,2].set_title("U1 et U2 à l'équilibre")
+# ax[0,2].set_xlabel("HH LH LL", color="black", fontsize=14)
+# ax[0,2].set_ylabel("RER /°Cj", color="black", fontsize=14)
+# PLOTTING RER
+
 
 
 #### PLOTTING
