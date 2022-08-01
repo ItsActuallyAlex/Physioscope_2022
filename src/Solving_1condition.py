@@ -26,8 +26,14 @@ U2 = np.empty(0)
 
 F01 = np.empty(0)
 F02 = np.empty(0)
-#### CONSTANTES VRAIMENT CONSTANTES
 
+U1_t0 = np.empty(0)
+U2_t0 = np.empty(0)
+
+F01_t0 = np.empty(0)
+F02_t0 = np.empty(0)
+#### CONSTANTES VRAIMENT CONSTANTES
+   
 #### VARIABLES ENTRE CONDITIONS
 BASE_photosynthese = np.array([6.978E+2, 6.978E+2, 6.978E+2], dtype=float)
 
@@ -45,6 +51,14 @@ BASE_k2 = np.array([2.099E+12, 2.099E+12, 2.099E+12], dtype=float)
 BASE_conc_ini_C0 = np.array([6.619E+10, 4.723E+11, 5.972E+10], dtype=float)
 BASE_conc_ini_C1 = np.array([5.344E+11, 7.829E+11, 4.574E+11], dtype=float)
 BASE_conc_ini_C2 = np.array([1.049E+12, 1.049E+12, 1.049E+12], dtype=float)
+
+conc_ini_puits = np.empty(0)
+
+for i in range(3) :
+    conc_ini_puits = np.append(conc_ini_puits, BASE_conc_ini_C1[i])
+    conc_ini_puits = np.append(conc_ini_puits, BASE_conc_ini_C2[i])
+print(conc_ini_puits)
+
 #### VARIABLES ENTRE CONDITIONS
 
 #### FONCTIONS
@@ -102,8 +116,6 @@ def A_RESOUDRE (Ci_m, C0_m, longueur_entrenoeuds, rayon_entrenoeuds, volume_i, v
 # print("VOLUME", )
 # #### PRINT VALEURS INI
 
-
-
 # print("DEBUT LOOP CONDITION _________________________")
 for condition, nom_condition in enumerate(nom_conditions) : 
 
@@ -145,8 +157,16 @@ for condition, nom_condition in enumerate(nom_conditions) :
     U1 = np.append(U1,UTILISATION (dCi_m_dt, volume_ini[0], v_i, k_i)[0])
     U2 = np.append(U2, UTILISATION (dCi_m_dt, volume_ini[1], v_i, k_i)[1])
 
-    F1 = np.append(F01, FLUX_2puits (dCi_m_dt, C0_m_t0, longueur_entrenoeuds, rayon_entrenoeuds)[0])
-    F2 = np.append(F02, FLUX_2puits (dCi_m_dt, C0_m_t0, longueur_entrenoeuds, rayon_entrenoeuds)[1])
+    F01 = np.append(F01, FLUX_2puits (dCi_m_dt, C0_m_t0, longueur_entrenoeuds, rayon_entrenoeuds)[0])
+    F02 = np.append(F02, FLUX_2puits (dCi_m_dt, C0_m_t0, longueur_entrenoeuds, rayon_entrenoeuds)[1])
+
+    # #### SETUP CONDI INI
+    # U1_t0 = np.append (U1_t0, UTILISATION (BASE_conc_ini_C1, BASE_volume_ini_feuilles, BASE_v1, BASE_k1)[0])
+    # U1_t0 = np.append (U2_t0, UTILISATION (BASE_conc_ini_C1, BASE_volume_ini_feuilles, BASE_v1, BASE_k1)[1])
+
+    # F01_t0 = np.append(F01_t0, FLUX_2puits (BASE_conc_ini_C1, BASE_conc_ini_C0, longueur_entrenoeuds, rayon_entrenoeuds)[0])
+    # F02_t0 = np.append(F02_t0, FLUX_2puits (BASE_conc_ini_C2, BASE_conc_ini_C0, longueur_entrenoeuds, rayon_entrenoeuds)[1])
+    # #### SETUP CONDI INI  
 
     print("RER1",RER1)
     print("RER2",RER2)
@@ -157,11 +177,19 @@ for condition, nom_condition in enumerate(nom_conditions) :
     print("F01", F01)
     print("F02", F02)
 
-
     print("__________________________")
 print("FIN LOOP CONDITION _________________________")
 
+#### SETUP CONDI INI
+for i in range(3) :
 
+
+    U1_t0 = np.append (U1_t0, UTILISATION (BASE_conc_ini_C1, BASE_volume_ini_feuilles, BASE_v1, BASE_k1)[0])
+    U1_t0 = np.append (U2_t0, UTILISATION (BASE_conc_ini_C2, BASE_volume_ini_bourgeon, BASE_v1, BASE_k1)[1])
+
+    F01_t0 = np.append(F01_t0, FLUX_2puits (BASE_conc_ini_C1, BASE_conc_ini_C0, longueur_entrenoeuds, rayon_entrenoeuds)[0])
+    F02_t0 = np.append(F02_t0, FLUX_2puits (BASE_conc_ini_C2, BASE_conc_ini_C0, longueur_entrenoeuds, rayon_entrenoeuds)[1])
+#### SETUP CONDI INI
 
 
 #### PLOTTING
@@ -171,7 +199,10 @@ fig,ax = plt.subplots(2,4)
 ax[0,0].plot(range(3), C1_m, color="green", marker="+")
 ax[1,0].plot(range(3), C2_m, color="green", marker="+")
 
-ax[0,0].set_title("C1_m et C2_m à l'équilibre")
+ax[0,0].plot(range(3), BASE_conc_ini_C1, color="red", marker="+")
+ax[1,0].plot(range(3), BASE_conc_ini_C2, color="red", marker="+")
+
+ax[0,0].set_title("C1_m et C2_m")
 ax[0,0].set_xlabel("HH LH LL", color="black", fontsize=14)
 ax[0,0].set_ylabel("Concentration en umolC/m3", color="black", fontsize=14)
 # PLOTTING CONCENTRATIONS
@@ -180,7 +211,10 @@ ax[0,0].set_ylabel("Concentration en umolC/m3", color="black", fontsize=14)
 ax[0,1].plot(range(3), RER1, color="green", marker="+")
 ax[1,1].plot(range(3), RER2, color="green", marker="+")
 
-ax[0,1].set_title("RER1 et RER2 à l'équilibre")
+ax[0,1].plot(range(3), RER (BASE_conc_ini_C1, BASE_v1, BASE_k1), color="red", marker="+")
+ax[1,1].plot(range(3), RER (BASE_conc_ini_C2, BASE_v2, BASE_k2), color="red", marker="+")
+
+ax[0,1].set_title("RER1 et RER2")
 ax[0,1].set_xlabel("HH LH LL", color="black", fontsize=14)
 ax[0,1].set_ylabel("RER /°Cj", color="black", fontsize=14)
 # PLOTTING RER
@@ -189,16 +223,25 @@ ax[0,1].set_ylabel("RER /°Cj", color="black", fontsize=14)
 ax[0,2].plot(range(3), U1, color="green", marker="+")
 ax[1,2].plot(range(3), U2, color="green", marker="+")
 
-ax[0,2].set_title("U1 et U2 à l'équilibre")
+print(U1_t0)
+print(U2_t0)
+
+ax[0,2].plot(range(3), U1_t0, color="red", marker="+")
+ax[1,2].plot(range(3), U2_t0, color="red", marker="+")
+
+ax[0,2].set_title("U1 et U2")
 ax[0,2].set_xlabel("HH LH LL", color="black", fontsize=14)
 ax[0,2].set_ylabel("umolC /°Cj", color="black", fontsize=14)
 # PLOTTING UTILISATION
 
 # PLOTTING FLUX
-ax[0,3].plot(range(3), U1, color="green", marker="+")
-ax[1,3].plot(range(3), U2, color="green", marker="+")
+ax[0,3].plot(range(3), F01, color="green", marker="+")
+ax[1,3].plot(range(3), F02, color="green", marker="+")
 
-ax[0,3].set_title("U1 et U2 à l'équilibre")
+ax[0,3].plot(range(3), F01_t0, color="red", marker="+")
+ax[1,3].plot(range(3), F02_t0, color="red", marker="+")
+
+ax[0,3].set_title("F01 et F02")
 ax[0,3].set_xlabel("HH LH LL", color="black", fontsize=14)
 ax[0,3].set_ylabel("umolC /°Cj", color="black", fontsize=14)
 # PLOTTING FLUX
