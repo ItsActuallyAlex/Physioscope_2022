@@ -13,7 +13,7 @@ viscosity = 1E6
 
 nom_conditions = np.array(["HH", "LH", "LL"], dtype=str)
 
-delta = 1.379E+10
+delta = 1.694E+10
 #### CONSTANTES
 
 #### VARIABLES ENTRE CONDITIONS
@@ -22,16 +22,16 @@ BASE_photosynthese = np.array([6.978E+2, 6.978E+2, 6.978E+2], dtype=float)
 BASE_longueur_entrenoeuds = np.array([4.339E-2, 4.339E-2, 4.339E-2], dtype=float)
 BASE_rayon_entrenoeuds = np.array([35.1E-6, 35.1E-6, 35.1E-6], dtype=float)
 
-BASE_volume_ini_bourgeon = np.array([8,849E-10, 8,849E-10, 8,849E-10], dtype=float)
-BASE_volume_ini_feuilles = np.array([1.063E-06, 1.063E-06, 1.063E-06], dtype=float)
+BASE_volume_ini_bourgeon = np.array([.849E-10, 8.849E-10, 8.849E-180], dtype=float)
+BASE_volume_ini_feuilles = np.array([4.422E-07, 4.422E-07, 4.422E-07], dtype=float)
 
-BASE_v1 = np.array([1.779E-02, 1.012E-02, 1.440E-02], dtype=float)
+BASE_v1 = np.array([1.779E-02, 1.012E-02, 1.012E-02], dtype=float)
 BASE_k1 = np.array([1.183E+12, 1.183E+12, 1.183E+12], dtype=float)
-BASE_v2 = np.array([6.510E-2, 4.510E-2, 4.510E-2], dtype=float)
+BASE_v2 = np.array([6.510E-2, 6.510E-2, 6.510E-2], dtype=float)
 BASE_k2 = np.array([2.099E+12, 2.099E+12, 2.099E+12], dtype=float)
 
-BASE_conc_ini_C0 = np.array([6.619E+10, 4.723E+11, 5.972E+10], dtype=float)
-BASE_conc_ini_C1 = np.array([5.344E+11, 7.829E+11, 4.574E+11], dtype=float)
+BASE_conc_ini_C0 = np.array([1.994E+11, 1.994E+11, 1.994E+11], dtype=float)
+BASE_conc_ini_C1 = np.array([5.916E+11, 5.916E+11, 5.916E+11], dtype=float)
 BASE_conc_ini_C2 = np.array([1.049E+12, 1.049E+12, 1.049E+12], dtype=float)
 #### VARIABLES ENTRE CONDITIONS
 
@@ -188,7 +188,7 @@ ax[0,2].plot(range(3), VOLUME1, color="green", marker="+")
 ax[1,2].plot(range(3), VOLUME2, color="green", marker="+")
 
 ax[0,2].plot(range(3), VOLUME(BASE_conc_ini_C1, BASE_v1, BASE_k1, BASE_volume_ini_feuilles), color="red", marker="+")
-# ax[1,2].plot(range(3), VOLUME(BASE_conc_ini_C2, BASE_v2, BASE_k2, BASE_volume_ini_bourgeon), color="red", marker="+")
+ax[1,2].plot(range(3), VOLUME(BASE_conc_ini_C2, BASE_v2, BASE_k2, BASE_volume_ini_bourgeon), color="red", marker="+")
 
 ax[0,2].set_title("VOLUME 1 et VOLUME 2 ")
 ax[0,2].set_xlabel("HH LH LL", color="black", fontsize=14)
@@ -201,7 +201,7 @@ ax[0,3].plot(range(3), U1, color="green", marker="+")
 ax[1,3].plot(range(3), U2, color="green", marker="+")
 
 ax[0,3].plot(range(3), UTILISATION(BASE_conc_ini_C1, BASE_v1, BASE_k1, BASE_volume_ini_feuilles), color="red", marker="+")
-# ax[1,3].plot(range(3), UTILISATION(BASE_conc_ini_C2, BASE_v2, BASE_k2, BASE_volume_ini_bourgeon) , color="red", marker="+")
+ax[1,3].plot(range(3), UTILISATION(BASE_conc_ini_C2, BASE_v2, BASE_k2, BASE_volume_ini_bourgeon) , color="red", marker="+")
 
 ax[0,3].set_title("UTLISATION 1 et UTILISATION 2 ")
 ax[0,3].set_xlabel("HH LH LL", color="black", fontsize=14)
