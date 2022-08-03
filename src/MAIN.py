@@ -107,8 +107,11 @@ def A_RESOUDRE (Ci_m, C0_m, longueur_entrenoeuds, rayon_entrenoeuds, v_i, k_i, V
 #### FONCTIONS
 
 #### A BOUGER 
-FLUX01 = np.empty(0)
-FLUX02 = np.empty(0)
+FLUX01_var = np.empty(0)
+FLUX02_var = np.empty(0)
+
+RER1_var = np.empty(0)
+RER2_var = np.empty(0)
 #### A BOUGER 
 
 
@@ -118,6 +121,10 @@ FLUX02 = np.empty(0)
 #### SOLVING
 print("DEBUT LOOP CONDITION _________________________")
 for condition, nom_condition in enumerate(nom_conditions) : 
+
+    v_i = np.empty(0)
+    k_i = np.empty(0)
+    volume_ini = np.empty(0)
 
     longueur_entrenoeuds = BASE_longueur_entrenoeuds[condition]
     rayon_entrenoeuds = BASE_rayon_entrenoeuds[condition]
@@ -147,25 +154,26 @@ for condition, nom_condition in enumerate(nom_conditions) :
 
         C1_m_var = np.append(C1_m_var, Ci_m[0])
         C2_m_var = np.append(C2_m_var, Ci_m[1])
-        
-        FLUX01 = np.append(FLUX01, FLUX_2puits (Ci_m, C0_m_t0, longueur_entrenoeuds, rayon_entrenoeuds))
-        FLUX02 = np.append(FLUX02, FLUX_2puits (Ci_m, C0_m_t0, longueur_entrenoeuds, rayon_entrenoeuds))
+
+        FLUX01_var = np.append(FLUX01_var, FLUX_2puits (Ci_m, C0_m_t0, longueur_entrenoeuds, rayon_entrenoeuds)[0])
+        print(FLUX01_var)
+
         
     ## BOUCLE UPDATE VOLUME
 
-    plt.title("Dynamique C1_m et C2_m")
-    plt.plot(range(0, 300, 20), C1_m_var, color="green", marker="+")
-    plt.plot(range(0, 300, 20), C2_m_var, color="red", marker="+")
-    plt.show()
-    C1_m_var = np.empty(0)
-    C2_m_var = np.empty(0)
+    # plt.title("Dynamique C1_m et C2_m")
+    # plt.plot(range(0, 300, 20), C1_m_var, color="green", marker="+")
+    # plt.plot(range(0, 300, 20), C2_m_var, color="red", marker="+")
+    # plt.show()
+    # C1_m_var = np.empty(0)
+    # C2_m_var = np.empty(0)
 
     plt.title("FLUX01 et FLUX02")
-    plt.plot(range(0, 300, 20), FLUX01, color="green", marker="+")
-    plt.plot(range(0, 300, 20), FLUX02, color="red", marker="+")
+    plt.plot(range(0, 300, 20), FLUX01_var, color="green", marker="+")
+    plt.plot(range(0, 300, 20), FLUX02_var, color="red", marker="+")
     plt.show()
-    FLUX01 = np.empty(0)
-    FLUX02 = np.empty(0)
+    FLUX01_var = np.empty(0)
+    FLUX02_var = np.empty(0)
 
     # DONNEES A L'EQUILIBRE
     # C1_m = np.append(C1_m, Ci_m[0])
