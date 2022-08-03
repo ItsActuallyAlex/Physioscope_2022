@@ -22,15 +22,15 @@ BASE_photosynthese = np.array([6.978E+2, 6.978E+2, 6.978E+2], dtype=float)
 BASE_longueur_entrenoeuds = np.array([4.339E-2, 4.339E-2, 4.339E-2], dtype=float)
 BASE_rayon_entrenoeuds = np.array([35.1E-6, 35.1E-6, 35.1E-6], dtype=float)
 
-BASE_volume_ini_bourgeon = np.array([.849E-10, 8.849E-10, 8.849E-180], dtype=float)
+BASE_volume_ini_bourgeon = np.array([8.849E-10, 8.849E-10, 8.849E-10], dtype=float)
 BASE_volume_ini_feuilles = np.array([4.422E-07, 4.422E-07, 4.422E-07], dtype=float)
 
 BASE_v1 = np.array([1.779E-02, 1.012E-02, 1.012E-02], dtype=float)
 BASE_k1 = np.array([1.183E+12, 1.183E+12, 1.183E+12], dtype=float)
-BASE_v2 = np.array([6.510E-2, 6.510E-2, 6.510E-2], dtype=float)
+BASE_v2 = np.array([3.510E-2, 3.510E-2, 3.510E-2], dtype=float)
 BASE_k2 = np.array([2.099E+12, 2.099E+12, 2.099E+12], dtype=float)
 
-BASE_conc_ini_C0 = np.array([1.994E+11, 1.994E+11, 1.994E+11], dtype=float)
+BASE_conc_ini_C0 = np.array([5.173E+10, 5.173E+10, 5.173E+10], dtype=float)
 BASE_conc_ini_C1 = np.array([5.916E+11, 5.916E+11, 5.916E+11], dtype=float)
 BASE_conc_ini_C2 = np.array([1.049E+12, 1.049E+12, 1.049E+12], dtype=float)
 #### VARIABLES ENTRE CONDITIONS
@@ -47,6 +47,9 @@ VOLUME2 = np.empty(0)
 
 U1 = np.empty(0)
 U2 = np.empty(0)
+
+C1_m_var = np.empty(0)
+C2_m_var = np.empty(0)
 #### ARRAYS INIT
 
 #### FONCTIONS
@@ -103,6 +106,15 @@ def A_RESOUDRE (Ci_m, C0_m, longueur_entrenoeuds, rayon_entrenoeuds, v_i, k_i, V
     return Ci_m_t_1
 #### FONCTIONS
 
+#### A BOUGER 
+FLUX01 = np.empty(0)
+FLUX02 = np.empty(0)
+#### A BOUGER 
+
+
+
+
+
 #### SOLVING
 print("DEBUT LOOP CONDITION _________________________")
 for condition, nom_condition in enumerate(nom_conditions) : 
@@ -124,27 +136,49 @@ for condition, nom_condition in enumerate(nom_conditions) :
     V_t = volume_ini
     Ci_m = conditions_ini_C1C2
     
+
+
     ## BOUCLE UPDATE VOLUME
-    for t in range(0, 300, 10) :
+    for t in range(0, 300, 20) :
         V_t = VOLUME(Ci_m, v_i, k_i, V_t)
 
         Ci_m = scipy.fsolve(A_RESOUDRE, x0=(Ci_m), args=(C0_m_t0, longueur_entrenoeuds, rayon_entrenoeuds, V_t, v_i, k_i), col_deriv=0, xtol=1.49012e-08, maxfev=0, band=None, epsfcn=None, factor=100, diag=None) 
         print("Les solutions à l'équilibre C1_m et C2_m pour la condition", nom_conditions[condition], "sont :", Ci_m)
+
+        C1_m_var = np.append(C1_m_var, Ci_m[0])
+        C2_m_var = np.append(C2_m_var, Ci_m[1])
+        
+        FLUX01 = np.append(FLUX01, FLUX_2puits (Ci_m, C0_m_t0, longueur_entrenoeuds, rayon_entrenoeuds))
+        FLUX02 = np.append(FLUX02, FLUX_2puits (Ci_m, C0_m_t0, longueur_entrenoeuds, rayon_entrenoeuds))
         
     ## BOUCLE UPDATE VOLUME
 
+    plt.title("Dynamique C1_m et C2_m")
+    plt.plot(range(0, 300, 20), C1_m_var, color="green", marker="+")
+    plt.plot(range(0, 300, 20), C2_m_var, color="red", marker="+")
+    plt.show()
+    C1_m_var = np.empty(0)
+    C2_m_var = np.empty(0)
+
+    plt.title("FLUX01 et FLUX02")
+    plt.plot(range(0, 300, 20), FLUX01, color="green", marker="+")
+    plt.plot(range(0, 300, 20), FLUX02, color="red", marker="+")
+    plt.show()
+    FLUX01 = np.empty(0)
+    FLUX02 = np.empty(0)
+
     # DONNEES A L'EQUILIBRE
-    C1_m = np.append(C1_m, Ci_m[0])
-    C2_m = np.append(C2_m, Ci_m[1])
+    # C1_m = np.append(C1_m, Ci_m[0])
+    # C2_m = np.append(C2_m, Ci_m[1])
 
-    RER1 = np.append(RER1, RER(C1_m[condition], BASE_v1[condition], BASE_k1[condition])) 
-    RER2 = np.append(RER2, RER(C2_m[condition], BASE_v2[condition], BASE_k2[condition])) 
+    # RER1 = np.append(RER1, RER(C1_m[condition], BASE_v1[condition], BASE_k1[condition])) 
+    # RER2 = np.append(RER2, RER(C2_m[condition], BASE_v2[condition], BASE_k2[condition])) 
 
-    VOLUME1 = np.append(VOLUME1, V_t[0])
-    VOLUME2 = np.append(VOLUME2, V_t[1])
+    # VOLUME1 = np.append(VOLUME1, V_t[0])
+    # VOLUME2 = np.append(VOLUME2, V_t[1])
 
-    U1 = np.append(U1, UTILISATION(C1_m[condition], BASE_v1[condition], BASE_k1[condition], V_t[0]))
-    U2 = np.append(U2, UTILISATION(C2_m[condition], BASE_v2[condition], BASE_k2[condition], V_t[1])) 
+    # U1 = np.append(U1, UTILISATION(C1_m[condition], BASE_v1[condition], BASE_k1[condition], V_t[0]))
+    # U2 = np.append(U2, UTILISATION(C2_m[condition], BASE_v2[condition], BASE_k2[condition], V_t[1])) 
     # DONNEES A L'EQUILIBRE
 
 
@@ -152,67 +186,101 @@ for condition, nom_condition in enumerate(nom_conditions) :
 print("FIN LOOP CONDITION _________________________")
 
 
+# #### PLOTTING
+# fig,ax = plt.subplots(2,4)
+
+# # PLOTTING CONCENTRATIONS INI
+# ax[0,0].plot(range(3), BASE_conc_ini_C1, color="red", marker="+")
+# ax[1,0].plot(range(3), BASE_conc_ini_C2, color="red", marker="+")
+
+# ax[0,0].set_title("C1_m et C2_m")
+# ax[0,0].set_xlabel("HH LH LL", color="black", fontsize=14)
+# ax[0,0].set_ylabel("Concentration en umolC/m3", color="black", fontsize=14)
+# ax[1,0].set_ylabel("Concentration en umolC/m3", color="black", fontsize=14)
+# # PLOTTING CONCENTRATIONS INI
+
+# # PLOTTING RER INI
+# ax[0,1].plot(range(3), RER(BASE_conc_ini_C1, BASE_v1, BASE_k1), color="red", marker="+")
+# ax[1,1].plot(range(3), RER(BASE_conc_ini_C2, BASE_v2, BASE_k2), color="red", marker="+")
+
+# ax[0,1].set_title("RER1 et RER2")
+# ax[0,1].set_xlabel("HH LH LL", color="black", fontsize=14)
+# ax[0,1].set_ylabel("/°Cj", color="black", fontsize=14)
+# ax[1,1].set_ylabel("/°Cj", color="black", fontsize=14)
+# # PLOTTING RER INI
+
+# # PLOTTING VOLUME INI
+# ax[0,2].plot(range(3), BASE_volume_ini_feuilles, color="red", marker="+")
+# ax[1,2].plot(range(3), BASE_volume_ini_bourgeon, color="red", marker="+")
+
+# ax[0,2].set_title("VOLUME 1 et VOLUME 2 ")
+# ax[0,2].set_xlabel("HH LH LL", color="black", fontsize=14)
+# ax[0,2].set_ylabel("m3", color="black", fontsize=14)
+# ax[1,2].set_ylabel("m3", color="black", fontsize=14)
+# # PLOTTING VOLUME INI
+
+# # PLOTTING UTILISATION INI
+# ax[0,3].plot(range(3), UTILISATION(BASE_conc_ini_C1, BASE_v1, BASE_k1, BASE_volume_ini_feuilles), color="red", marker="+")
+# ax[1,3].plot(range(3), UTILISATION(BASE_conc_ini_C2, BASE_v2, BASE_k2, BASE_volume_ini_bourgeon) , color="red", marker="+")
+
+# ax[0,3].set_title("UTLISATION 1 et UTILISATION 2 ")
+# ax[0,3].set_xlabel("HH LH LL", color="black", fontsize=14)
+# ax[0,3].set_ylabel("umol/°Cj", color="black", fontsize=14)
+# ax[1,3].set_ylabel("umol/°Cj", color="black", fontsize=14)
+# # PLOTTING UTILISATION INI
+# plt.show()
+
+
+
+
+
+
+# fig,ax = plt.subplots(2,4)
+
+# # PLOTTING CONCENTRATIONS EQ
+# ax[0,0].plot(range(3), C1_m, color="green", marker="+")
+# ax[1,0].plot(range(3), C2_m, color="green", marker="+")
+
+# ax[0,0].set_title("C1_m et C2_m")
+# ax[0,0].set_xlabel("HH LH LL", color="black", fontsize=14)
+# ax[0,0].set_ylabel("Concentration en umolC/m3", color="black", fontsize=14)
+# ax[1,0].set_ylabel("Concentration en umolC/m3", color="black", fontsize=14)
+# # PLOTTING CONCENTRATIONS EQ
+
+# # PLOTTING RER EQ
+# ax[0,1].plot(range(3), RER1, color="green", marker="+")
+# ax[1,1].plot(range(3), RER2, color="green", marker="+")
+
+# ax[0,1].set_title("RER1 et RER2")
+# ax[0,1].set_xlabel("HH LH LL", color="black", fontsize=14)
+# ax[0,1].set_ylabel("/°Cj", color="black", fontsize=14)
+# ax[1,1].set_ylabel("/°Cj", color="black", fontsize=14)
+# # PLOTTING RER EQ
+
+# # PLOTTING VOLUME EQ
+# ax[0,2].plot(range(3), VOLUME1, color="green", marker="+")
+# ax[1,2].plot(range(3), VOLUME2, color="green", marker="+")
+
+# ax[0,2].set_title("VOLUME 1 et VOLUME 2 ")
+# ax[0,2].set_xlabel("HH LH LL", color="black", fontsize=14)
+# ax[0,2].set_ylabel("m3", color="black", fontsize=14)
+# ax[1,2].set_ylabel("m3", color="black", fontsize=14)
+# # PLOTTING VOLUME EQ
+
+# # PLOTTING UTILISATION EQ
+# ax[0,3].plot(range(3), U1, color="green", marker="+")
+# ax[1,3].plot(range(3), U2, color="green", marker="+")
+
+# ax[0,3].set_title("UTLISATION 1 et UTILISATION 2 ")
+# ax[0,3].set_xlabel("HH LH LL", color="black", fontsize=14)
+# ax[0,3].set_ylabel("umol/°Cj", color="black", fontsize=14)
+# ax[1,3].set_ylabel("umol/°Cj", color="black", fontsize=14)
+# # PLOTTING UTILISATION EQ
+# plt.show()
+
 #### PLOTTING
-fig,ax = plt.subplots(2,4)
-
-# PLOTTING CONCENTRATIONS
-ax[0,0].plot(range(3), C1_m, color="green", marker="+")
-ax[1,0].plot(range(3), C2_m, color="green", marker="+")
-
-ax[0,0].plot(range(3), BASE_conc_ini_C1, color="red", marker="+")
-ax[1,0].plot(range(3), BASE_conc_ini_C2, color="red", marker="+")
-
-ax[0,0].set_title("C1_m et C2_m")
-ax[0,0].set_xlabel("HH LH LL", color="black", fontsize=14)
-ax[0,0].set_ylabel("Concentration en umolC/m3", color="black", fontsize=14)
-ax[1,0].set_ylabel("Concentration en umolC/m3", color="black", fontsize=14)
-# PLOTTING CONCENTRATIONS
 
 
-# PLOTTING RER
-ax[0,1].plot(range(3), RER1, color="green", marker="+")
-ax[1,1].plot(range(3), RER2, color="green", marker="+")
-
-ax[0,1].plot(range(3), RER(BASE_conc_ini_C1, BASE_v1, BASE_k1), color="red", marker="+")
-ax[1,1].plot(range(3), RER(BASE_conc_ini_C2, BASE_v2, BASE_k2), color="red", marker="+")
-
-ax[0,1].set_title("RER1 et RER2")
-ax[0,1].set_xlabel("HH LH LL", color="black", fontsize=14)
-ax[0,1].set_ylabel("/°Cj", color="black", fontsize=14)
-ax[1,1].set_ylabel("/°Cj", color="black", fontsize=14)
-# PLOTTING RER
-
-
-# PLOTTING VOLUME
-ax[0,2].plot(range(3), VOLUME1, color="green", marker="+")
-ax[1,2].plot(range(3), VOLUME2, color="green", marker="+")
-
-ax[0,2].plot(range(3), VOLUME(BASE_conc_ini_C1, BASE_v1, BASE_k1, BASE_volume_ini_feuilles), color="red", marker="+")
-ax[1,2].plot(range(3), VOLUME(BASE_conc_ini_C2, BASE_v2, BASE_k2, BASE_volume_ini_bourgeon), color="red", marker="+")
-
-ax[0,2].set_title("VOLUME 1 et VOLUME 2 ")
-ax[0,2].set_xlabel("HH LH LL", color="black", fontsize=14)
-ax[0,2].set_ylabel("m3", color="black", fontsize=14)
-ax[1,2].set_ylabel("m3", color="black", fontsize=14)
-# PLOTTING VOLUME
-
-# PLOTTING UTILISATION
-ax[0,3].plot(range(3), U1, color="green", marker="+")
-ax[1,3].plot(range(3), U2, color="green", marker="+")
-
-ax[0,3].plot(range(3), UTILISATION(BASE_conc_ini_C1, BASE_v1, BASE_k1, BASE_volume_ini_feuilles), color="red", marker="+")
-ax[1,3].plot(range(3), UTILISATION(BASE_conc_ini_C2, BASE_v2, BASE_k2, BASE_volume_ini_bourgeon) , color="red", marker="+")
-
-ax[0,3].set_title("UTLISATION 1 et UTILISATION 2 ")
-ax[0,3].set_xlabel("HH LH LL", color="black", fontsize=14)
-ax[0,3].set_ylabel("umol/°Cj", color="black", fontsize=14)
-ax[1,3].set_ylabel("umol/°Cj", color="black", fontsize=14)
-# PLOTTING UTILISATION
-
-
-#### PLOTTING
-
-plt.show()
 
 
 
