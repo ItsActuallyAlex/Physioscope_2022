@@ -30,12 +30,16 @@ BASE_volume_ini_feuilles = np.array([4.422E-07, 4.422E-07, 4.422E-07], dtype=flo
 # BASE_v2 = np.array([3.510E-2, 3.510E-2, 3.510E-2], dtype=float)
 # BASE_k2 = np.array([2.099E+12, 2.099E+12, 2.099E+12], dtype=float)
 
-BASE_v1 = np.array([1.779E-1, 1.012E-2, 1.012E-2], dtype=float)
+BASE_v1 = np.array([1.779E-0, 1.012E-1, 1.012E-1], dtype=float)
 BASE_k1 = np.array([1.183E+12, 1.183E+12, 1.183E+12], dtype=float)
 BASE_v2 = np.array([3.510E-2, 3.510E-2, 3.510E-2], dtype=float)
 BASE_k2 = np.array([2.099E+12, 2.099E+12, 2.099E+12], dtype=float)
 
-BASE_conc_ini_C0 = np.array([5.173E+10, 5.173E+10, 5.173E+10], dtype=float)
+# BASE_conc_ini_C0 = np.array([5.173E+10, 5.173E+10, 5.173E+10], dtype=float)
+# BASE_conc_ini_C1 = np.array([5.916E+11, 5.916E+11, 5.916E+11], dtype=float)
+# BASE_conc_ini_C2 = np.array([1.049E+12, 1.049E+12, 1.049E+12], dtype=float)
+
+BASE_conc_ini_C0 = np.array([5.173E+12, 5.173E+12, 5.173E+12], dtype=float)
 BASE_conc_ini_C1 = np.array([5.916E+11, 5.916E+11, 5.916E+11], dtype=float)
 BASE_conc_ini_C2 = np.array([1.049E+12, 1.049E+12, 1.049E+12], dtype=float)
 #### VARIABLES ENTRE CONDITIONS
@@ -52,7 +56,6 @@ VOLUME2 = np.empty(0)
 
 U1 = np.empty(0)
 U2 = np.empty(0)
-
 #### ARRAYS INIT
 
 #### FONCTIONS
@@ -104,9 +107,9 @@ def UTILISATION (Ci_m, v_i, k_i, V_t) :
 
 def A_RESOUDRE (Ci_m, C0_m, longueur_entrenoeuds, rayon_entrenoeuds, v_i, k_i, V_t) :
 
-    Ci_m_t_1 = C0_m*FLUX_2puits (Ci_m, C0_m, longueur_entrenoeuds, rayon_entrenoeuds) - UTILISATION (Ci_m, v_i, k_i, V_t)
+    eq = C0_m*FLUX_2puits (Ci_m, C0_m, longueur_entrenoeuds, rayon_entrenoeuds) - UTILISATION (Ci_m, v_i, k_i, V_t)
 
-    return Ci_m_t_1
+    return eq
 
 def FLUX_puits1 (Ci_m, C0_m, longueur_entrenoeuds, rayon_entrenoeuds) :
 
@@ -131,7 +134,6 @@ def FLUX_puits2 (Ci_m, C0_m, longueur_entrenoeuds, rayon_entrenoeuds) :
     F02 = ((R_1*(C0_m-Ci_m[1]) + R_0*(Ci_m[0]-Ci_m[1])) / denominateur)
 
     return F02
-
 #### FONCTIONS
 
 #### A BOUGER 
@@ -172,54 +174,84 @@ for condition, nom_condition in enumerate(nom_conditions) :
 
     V_t = volume_ini
     Ci_m = conditions_ini_C1C2
+
+    print("PRINT FONCTION RER", RER (conditions_ini_C1C2, v_i, k_i))
+
+    print("RER 1 a t0", RER (C1_m_t0, BASE_v1[0], BASE_k1[0]))
+    a = (5.9E11*1.779E-1)/(1.183E12+5.9E11)
+    b = (4.83E10*1.779E-1)/(1.183E12+4.83E10)
+    print("RER1 t0 ", a)
+    print("RER1 t1 ", b)
     
     ## BOUCLE UPDATE VOLUME
     for t in range(0, 300, 20) :
         V_t = VOLUME(Ci_m, v_i, k_i, V_t)
 
-        Ci_m = scipy.fsolve(A_RESOUDRE, x0=(Ci_m), args=(C0_m_t0, longueur_entrenoeuds, rayon_entrenoeuds, V_t, v_i, k_i), col_deriv=0, xtol=1.49012e-08, maxfev=0, band=None, epsfcn=None, factor=100, diag=None) 
+        Ci_m = scipy.fsolve(A_RESOUDRE, x0=(Ci_m), args=(C0_m_t0, longueur_entrenoeuds, rayon_entrenoeuds, v_i, k_i, V_t), col_deriv=0, xtol=1.49012e-08, maxfev=0, band=None, epsfcn=None, factor=100, diag=None) 
         print("Les solutions à l'équilibre C1_m et C2_m pour la condition", nom_conditions[condition], "sont :", Ci_m)
     
         C1_m_var = np.append(C1_m_var, Ci_m[0])
         C2_m_var = np.append(C2_m_var, Ci_m[1])
 
-        FLUX01_var = np.append(FLUX01_var, FLUX_puits1 (Ci_m, C0_m_t0, longueur_entrenoeuds, rayon_entrenoeuds))
-        FLUX02_var = np.append(FLUX02_var, FLUX_puits2 (Ci_m, C0_m_t0, longueur_entrenoeuds, rayon_entrenoeuds))
+        FLUX01_var = np.append(FLUX01_var, FLUX_2puits (Ci_m, C0_m_t0, longueur_entrenoeuds, rayon_entrenoeuds)[0])
+        FLUX02_var = np.append(FLUX02_var, FLUX_2puits (Ci_m, C0_m_t0, longueur_entrenoeuds, rayon_entrenoeuds)[1])
 
         U1_var = np.append(U1_var, UTILISATION (Ci_m, v_i, k_i, V_t)[0])
         U2_var = np.append(U2_var, UTILISATION (Ci_m, v_i, k_i, V_t)[1])
-    ## BOUCLE UPDATE VOLUME
 
-    # RESET Ci_m_var
-    C1_m_var = np.empty(0)
-    C2_m_var = np.empty(0)
-    # RESET Ci_m_var
+        RER1_var = np.append(RER1_var, RER (Ci_m, v_i, k_i)[0])
+        RER2_var = np.append(RER2_var, RER (Ci_m, v_i, k_i)[1])
 
-    # PLOTTING FLUX VAR
+        print("aaaaa",C0_m_t0)
+
+        ## BOUCLE UPDATE VOLUME
+
     fig,ax = plt.subplots(2,2)
 
+    # PLOTTING FLUX VAR
     ax[0,0].plot(range(0, 300, 20), FLUX01_var, color="red", marker="+")
     ax[0,0].plot(range(0, 300, 20), FLUX02_var, color="green", marker="+")
-
     ax[0,0].set_title("FLUX01 et FLUX02 var")
-    ax[0,0].set_ylabel("FLUX en umolC/m3", color="black", fontsize=14)
-   
-    FLUX01_var = np.empty(0)
-    FLUX02_var = np.empty(0)
-    # PLOTTING FLUX VAR
+    ax[0,0].set_ylabel("umolC/°Cj", color="black", fontsize=14)
+     # PLOTTING FLUX VAR
 
     # PLOTTING UTILISATION VAR
     ax[1,0].plot(range(0, 300, 20), U1_var, color="red", marker="+")
     ax[1,0].plot(range(0, 300, 20), U2_var, color="green", marker="+")
-
     ax[1,0].set_title("U1 et U2 var")
-    ax[1,0].set_ylabel("UTILISATION en umolC/°Cj", color="black", fontsize=14)
+    ax[1,0].set_ylabel("umolC/°Cj", color="black", fontsize=14)
+    # PLOTTING UTILISATION VAR
+
+    # PLOTTING RER VAR
+    ax[1,1].plot(range(0, 300, 20), RER1_var, color="red", marker="+")
+    ax[1,1].plot(range(0, 300, 20), RER2_var, color="green", marker="+")
+    ax[1,1].set_title("RER1 et RER2 var")
+    ax[1,1].set_ylabel("/°Cj", color="black", fontsize=14)
+    # PLOTTING RER VAR
+
+    # PLOTTING CI_M VAR
+    ax[0,1].plot(range(0, 300, 20), C1_m_var, color="red", marker="+")
+    ax[0,1].plot(range(0, 300, 20), C2_m_var, color="green", marker="+")
+    ax[0,1].set_title("C1_m et C2_m var")
+    ax[0,1].set_ylabel("umol/m3", color="black", fontsize=14)
+    plt.show()
+    # PLOTTING CI_M VAR
+
+    # RESET DES VAR
+    FLUX01_var = np.empty(0)
+    FLUX02_var = np.empty(0)
 
     U1_var = np.empty(0)
     U2_var = np.empty(0)
 
-    plt.show()
-    # PLOTTING UTILISATION VAR
+    RER1_var = np.empty(0)
+    RER2_var = np.empty(0)
+    
+    C1_m_var = np.empty(0)
+    C2_m_var = np.empty(0)
+    # RESET DES VAR
+
+
 
 
 
