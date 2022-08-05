@@ -141,6 +141,7 @@ def A_RESOUDRE (Ci_m, C0_m, longueur_entrenoeuds, rayon_entrenoeuds, v_i, k_i, V
 #### FONCTIONS
 
 #### A BOUGER 
+C0_m_var = np.empty(0)
 C1_m_var = np.empty(0)
 C2_m_var = np.empty(0)
 
@@ -178,57 +179,72 @@ for condition, nom_condition in enumerate(nom_conditions) :
     C0_m_t0 = BASE_conc_ini_C0[condition]
     C1_m_t0 = BASE_conc_ini_C1[condition]
     C2_m_t0 = BASE_conc_ini_C2[condition]
-    conditions_ini_C1C2 = np.array([C1_m_t0, C2_m_t0])
-    Ci_m = conditions_ini_C1C2
+    C1C2_ini = np.array([C1_m_t0, C2_m_t0])
+    Ci_m = C1C2_ini
 
-    V_ini = np.append(BASE_volume_ini_bourgeon[condition],BASE_volume_ini_feuilles[condition])
+    V_ini = np.append(BASE_volume_ini_feuilles[condition], BASE_volume_ini_bourgeon[condition])
     V_t = V_ini
 
 ## BOUCLE RESOLUTION TEMPS ____________________________________________________________________________________________________________
     for t in range(0, 300, degre_jour) :
-        V_t = VOLUME(Ci_m, v_i, k_i, V_t)
 
-    #     if condition == "HH" or condition == "LH" :
-    #         C0_m = C0_m_HHLH[t] + C0_m_HHLH[t]*0.05
-
-
-    #     else :
-    #         C0_m = C0_m_LL[t]
-    # # EVOLUTION C0_m
-
-
-        Ci_m = scipy.fsolve(A_RESOUDRE, x0=(Ci_m), args=(C0_m_t0, longueur_entrenoeuds, rayon_entrenoeuds, v_i, k_i, V_t), col_deriv=0, xtol=1.49012e-08, maxfev=0, band=None, epsfcn=None, factor=100, diag=None) 
-        print("Les solutions à l'équilibre C1_m et C2_m pour la condition", nom_conditions[condition], "sont :", Ci_m)
-        
-        # CHECK VALEURS INI INTEGREES
+        ## AJOUT VALEURS T0
         if t == 0 :
-            print("VALEUR RER1 T0", RER (Ci_m, v_i, k_i)[0])
-            print("VALEUR RER2 T0", RER (Ci_m, v_i, k_i)[1])
-            print("VALEURS C1_m à T0",Ci_m[0])
-            print("VALEURS C1_m à T0", Ci_m[1])
-            print("VALEURS V1 à T0", V_t[0])
-            print("VALEURS V2 à T0", V_t[1])
-        # CHECK VALEURS INI INTEGREES
+            C0_m_var = np.append(C0_m_var, C0_m_t0)
+            C1_m_var = np.append(C1_m_var, Ci_m[0])
+            C2_m_var = np.append(C2_m_var, Ci_m[1])
+
+            FLUX01_var = np.append(FLUX01_var, FLUX_2puits (Ci_m, C0_m_t0, longueur_entrenoeuds, rayon_entrenoeuds)[0])
+            FLUX02_var = np.append(FLUX02_var, FLUX_2puits (Ci_m, C0_m_t0, longueur_entrenoeuds, rayon_entrenoeuds)[1])
+
+            U1_var = np.append(U1_var, UTILISATION (Ci_m, v_i, k_i, V_t)[0])
+            U2_var = np.append(U2_var, UTILISATION (Ci_m, v_i, k_i, V_t)[1])
+
+            RER1_var = np.append(RER1_var, RER (Ci_m, v_i, k_i)[0])
+            RER2_var = np.append(RER2_var, RER (Ci_m, v_i, k_i)[1])
+
+            VOLUME1_var = np.append(VOLUME1_var, V_t[0])
+            VOLUME2_var = np.append(VOLUME2_var, V_t[1]) 
+
+        # ELSE SI ON EST PAS A T0
+        else :
+            # ACTUALISATION VOLUME
+            V_t = VOLUME(Ci_m, v_i, k_i, V_t)
+            # ACTUALISATION VOLUME
+
+            Ci_m = scipy.fsolve(A_RESOUDRE, x0=(Ci_m), args=(C0_m_t0, longueur_entrenoeuds, rayon_entrenoeuds, v_i, k_i, V_t), col_deriv=0, xtol=1.49012e-08, maxfev=0, band=None, epsfcn=None, factor=100, diag=None) 
+            print("Les solutions à l'équilibre C1_m et C2_m pour la condition", nom_conditions[condition], "sont :", Ci_m)
+            
+            # CHECK VALEURS INI INTEGREES
+            if t == 0 :
+                print("VALEUR RER1 T0", RER (Ci_m, v_i, k_i)[0])
+                print("VALEUR RER2 T0", RER (Ci_m, v_i, k_i)[1])
+                print("VALEURS C1_m à T0",Ci_m[0])
+                print("VALEURS C1_m à T0", Ci_m[1])
+                print("VALEURS V1 à T0", V_t[0])
+                print("VALEURS V2 à T0", V_t[1])
+            # CHECK VALEURS INI INTEGREES
 
 
 
-        C1_m_var = np.append(C1_m_var, Ci_m[0])
-        C2_m_var = np.append(C2_m_var, Ci_m[1])
+            C1_m_var = np.append(C1_m_var, Ci_m[0])
+            C2_m_var = np.append(C2_m_var, Ci_m[1])
 
-        FLUX01_var = np.append(FLUX01_var, FLUX_2puits (Ci_m, C0_m_t0, longueur_entrenoeuds, rayon_entrenoeuds)[0])
-        FLUX02_var = np.append(FLUX02_var, FLUX_2puits (Ci_m, C0_m_t0, longueur_entrenoeuds, rayon_entrenoeuds)[1])
+            FLUX01_var = np.append(FLUX01_var, FLUX_2puits (Ci_m, C0_m_t0, longueur_entrenoeuds, rayon_entrenoeuds)[0])
+            FLUX02_var = np.append(FLUX02_var, FLUX_2puits (Ci_m, C0_m_t0, longueur_entrenoeuds, rayon_entrenoeuds)[1])
 
-        U1_var = np.append(U1_var, UTILISATION (Ci_m, v_i, k_i, V_t)[0])
-        U2_var = np.append(U2_var, UTILISATION (Ci_m, v_i, k_i, V_t)[1])
+            U1_var = np.append(U1_var, UTILISATION (Ci_m, v_i, k_i, V_t)[0])
+            U2_var = np.append(U2_var, UTILISATION (Ci_m, v_i, k_i, V_t)[1])
 
-        RER1_var = np.append(RER1_var, RER (Ci_m, v_i, k_i)[0])
-        RER2_var = np.append(RER2_var, RER (Ci_m, v_i, k_i)[1])
+            RER1_var = np.append(RER1_var, RER (Ci_m, v_i, k_i)[0])
+            RER2_var = np.append(RER2_var, RER (Ci_m, v_i, k_i)[1])
 
-        VOLUME1_var = np.append(VOLUME1_var, V_t[0])
-        VOLUME2_var = np.append(VOLUME2_var, V_t[1])
-## BOUCLE RESOLUTION TEMPS ____________________________________________________________________________________________________________
+            VOLUME1_var = np.append(VOLUME1_var, V_t[0])
+            VOLUME2_var = np.append(VOLUME2_var, V_t[1])
+    ## BOUCLE RESOLUTION TEMPS ____________________________________________________________________________________________________________
 
 #### MEGA PLOTTING CRADINGUE ____________________________________________________________________________________________________________
+    # IF ON EST EN HH
     if nom_condition == "HH" :
         # PLOTTING FLUX VAR
         FLUX01_HH, = ax[0,0].plot(range(0, 300, degre_jour), FLUX01_var, color="red", marker="+", label = "puits_1 HH", linestyle="dashdot")
@@ -265,7 +281,9 @@ for condition, nom_condition in enumerate(nom_conditions) :
         ax[2,0].set_ylabel("umolC/°Cj", color="black", fontsize=14)
         # PLOTTING VOLUME VAR
 
+    # IF ON EST EN LH
     if nom_condition == "LH" :
+        
         # PLOTTING FLUX VAR
         FLUX01_LH, = ax[0,0].plot(range(0, 300, degre_jour), FLUX01_var, color="orange", marker="+", label = "puits_1 LH")
         FLUX02_LH, = ax[0,0].plot(range(0, 300, degre_jour), FLUX02_var, color="blue", marker="+", label = "puits_2 LH")
@@ -301,6 +319,7 @@ for condition, nom_condition in enumerate(nom_conditions) :
         ax[2,0].set_ylabel("umolC/°Cj", color="black", fontsize=14)
         # PLOTTING VOLUME VAR
 
+    # IF ON EST EN LL
     if nom_condition == "LL" :
         # PLOTTING FLUX VAR
         FLUX01_LL, = ax[0,0].plot(range(0, 300, degre_jour), FLUX01_var, color="yellow", marker="+", label = "puits_1 LL", linestyle="dashed")
@@ -336,7 +355,8 @@ for condition, nom_condition in enumerate(nom_conditions) :
         ax[2,0].set_title("V1 et V2 var")
         ax[2,0].set_ylabel("umolC/°Cj", color="black", fontsize=14)
         # PLOTTING VOLUME VAR
-
+    
+    # ELSE ERROR SI ON EST NI HH NI LH NI LL
     else : 
         print("ERROR")
 
