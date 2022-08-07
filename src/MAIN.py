@@ -126,18 +126,6 @@ def A_RESOUDRE (Ci_m, C0_m, longueur_entrenoeuds, rayon_entrenoeuds, v_i, k_i, V
     eq = C0_m*FLUX_2puits (Ci_m, C0_m, longueur_entrenoeuds, rayon_entrenoeuds) - UTILISATION (Ci_m, v_i, k_i, V_t)
 
     return eq
-
-
-
-    R_ = RESISTANCES (longueur_entrenoeuds, rayon_entrenoeuds)
-    R_0 = R_[0]
-    R_1 = R_[1]
-    R_2 = R_[2]
-    denominateur = R_0*(R_1+R_2)+R_1*R_2
-
-    F02 = ((R_1*(C0_m-Ci_m[1]) + R_0*(Ci_m[0]-Ci_m[1])) / denominateur)
-
-    return F02
 #### FONCTIONS
 
 #### A BOUGER 
@@ -161,7 +149,7 @@ VOLUME2_var = np.empty(0)
 ## SETUP PLOTS
 fig,ax = plt.subplots(3,2)
 ## SETUP PLOTS
-
+ 
 #### SOLVING
 print("DEBUT LOOP CONDITION _________________________")
 for condition, nom_condition in enumerate(nom_conditions) : 
@@ -184,6 +172,7 @@ for condition, nom_condition in enumerate(nom_conditions) :
 
     V_ini = np.append(BASE_volume_ini_feuilles[condition], BASE_volume_ini_bourgeon[condition])
     V_t = V_ini
+    VARIABLE_VOLUME = V_ini
 
 ## BOUCLE RESOLUTION TEMPS ____________________________________________________________________________________________________________
     for t in range(0, 300, degre_jour) :
