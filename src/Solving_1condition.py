@@ -36,6 +36,7 @@ F02_t0 = np.empty(0)
    
 #### VARIABLES ENTRE CONDITIONS
 <<<<<<< HEAD
+<<<<<<< HEAD
 BASE_photosynthese = np.array([6.978E+2, 6.978E+2, 6.978E+2], dtype=float)
 
 BASE_longueur_entrenoeuds = np.array([4.339E-2, 4.339E-2, 4.339E-2], dtype=float)
@@ -46,6 +47,17 @@ BASE_volume_ini_feuilles = np.array([1.063E-06, 1.063E-06, 1.063E-06], dtype=flo
 
 BASE_v1 = np.array([1.779E-02, 1.012E-02, 1.440E-02], dtype=float)
 BASE_k1 = np.array([1.183E+12, 1.183E+12, 1.183E+12], dtype=float)
+=======
+
+BASE_longueur_commune_entrenoeuds = np.array([4.339E-2, 4.339E-2, 4.339E-2], dtype=float)
+BASE_rayon_commun_entrenoeuds = np.array([1.977E-5, 1.977E-5, 1.977E-5], dtype=float)
+
+BASE_volume_ini_bourgeon = np.array([8,849E-10, 8,849E-10, 8,849E-10], dtype=float)
+BASE_volume_ini_feuilles = np.array([1.063E-6, 1.063E-6, 1.063E-6], dtype=float)
+
+BASE_v1 = np.array([1.779E-02, 1.012E-02, 1.440E-02], dtype=float)
+BASE_k1 = np.array([1.183E12, 1.183E12, 1.183E12], dtype=float)
+>>>>>>> a1b2f26b34e9cd943ead618bab9d6775497b368d
 =======
 
 BASE_longueur_commune_entrenoeuds = np.array([4.339E-2, 4.339E-2, 4.339E-2], dtype=float)
