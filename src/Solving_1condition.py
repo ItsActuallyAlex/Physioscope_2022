@@ -35,6 +35,7 @@ F02_t0 = np.empty(0)
 #### CONSTANTES VRAIMENT CONSTANTES
    
 #### VARIABLES ENTRE CONDITIONS
+<<<<<<< HEAD
 BASE_photosynthese = np.array([6.978E+2, 6.978E+2, 6.978E+2], dtype=float)
 
 BASE_longueur_entrenoeuds = np.array([4.339E-2, 4.339E-2, 4.339E-2], dtype=float)
@@ -45,6 +46,17 @@ BASE_volume_ini_feuilles = np.array([1.063E-06, 1.063E-06, 1.063E-06], dtype=flo
 
 BASE_v1 = np.array([1.779E-02, 1.012E-02, 1.440E-02], dtype=float)
 BASE_k1 = np.array([1.183E+12, 1.183E+12, 1.183E+12], dtype=float)
+=======
+
+BASE_longueur_commune_entrenoeuds = np.array([4.339E-2, 4.339E-2, 4.339E-2], dtype=float)
+BASE_rayon_commun_entrenoeuds = np.array([1.977E-5, 1.977E-5, 1.977E-5], dtype=float)
+
+BASE_volume_ini_bourgeon = np.array([8,849E-10, 8,849E-10, 8,849E-10], dtype=float)
+BASE_volume_ini_feuilles = np.array([1.063E-6, 1.063E-6, 1.063E-6], dtype=float)
+
+BASE_v1 = np.array([1.779E-02, 1.012E-02, 1.440E-02], dtype=float)
+BASE_k1 = np.array([1.183E12, 1.183E12, 1.183E12], dtype=float)
+>>>>>>> a1b2f26b34e9cd943ead618bab9d6775497b368d
 BASE_v2 = np.array([6.510E-2, 4.510E-2, 4.510E-2], dtype=float)
 BASE_k2 = np.array([2.099E+12, 2.099E+12, 2.099E+12], dtype=float)
 
@@ -119,11 +131,28 @@ def A_RESOUDRE (Ci_m, C0_m, longueur_entrenoeuds, rayon_entrenoeuds, volume_i, v
 # print("DEBUT LOOP CONDITION _________________________")
 for condition, nom_condition in enumerate(nom_conditions) : 
 
+<<<<<<< HEAD
     longueur_entrenoeuds = BASE_longueur_entrenoeuds[condition]
     rayon_entrenoeuds = BASE_rayon_entrenoeuds[condition]
 
     volume_ini = np.append(BASE_volume_ini_bourgeon[condition],BASE_volume_ini_feuilles[condition])
 
+=======
+    longueur_commune_entrenoeuds = BASE_longueur_commune_entrenoeuds[condition]
+    # print("longueur_commune_entrenoeuds",longueur_commune_entrenoeuds)
+    rayon_commun_entrenoeuds = BASE_rayon_commun_entrenoeuds[condition]
+    # print("rayon_commun_entrenoeuds",rayon_commun_entrenoeuds)
+    concentration_0 = BASE_conc_ini_C0[condition]
+    # print("concentration_0", concentration_0)
+    # coef_delta_feuilles = BASE_coef_delta_feuilles[condition]
+    # coef_delta_bourgeon = BASE_coef_delta_bourgeon[condition]
+    # coef_delta = np.append(BASE_coef_delta_feuilles[condition], BASE_coef_delta_bourgeon[condition])
+    # print("coef_delta",coef_delta)
+    # volume_fixe_feuilles = BASE_volume_fixe_feuilles[condition]
+    # volume_fixe_bourgeon = BASE_volume_fixe_bourgeon[condition]
+    volume_i = np.append(BASE_volume_ini_bourgeon[condition],BASE_volume_ini_feuilles[condition])
+    # print("volume_i", volume_i)
+>>>>>>> a1b2f26b34e9cd943ead618bab9d6775497b368d
     v_i = np.append(BASE_v1[condition], BASE_v2[condition])
     k_i = np.append(BASE_k1[condition], BASE_k2[condition])
 
