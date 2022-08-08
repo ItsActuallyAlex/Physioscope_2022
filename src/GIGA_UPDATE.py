@@ -10,11 +10,8 @@ import math
 temp_20 = 293
 gaz_p = 8.314
 viscosity = 1E6
-
 nom_conditions = np.array(["HH", "LH", "LL"], dtype=str)
-
 delta = 1.694E+10
-
 degre_jour = 20
 #### CONSTANTES
 
