@@ -162,35 +162,27 @@ for condition, nom_condition in enumerate(nom_conditions) :
 ## BOUCLE RESOLUTION TEMPS ____________________________________________________________________________________________________________
     for t in range(0, 300, degre_jour) :
 
-
+        # RESOLUTION
         Ci_m = scipy.fsolve(A_RESOUDRE, x0=(Ci_m), args=(C0_m_t0, longueur_entrenoeuds, rayon_entrenoeuds, v_i, k_i, VARIABLE_VOLUME), col_deriv=0, xtol=1.49012e-08, maxfev=0, band=None, epsfcn=None, factor=100, diag=None) 
         print("Les solutions à l'équilibre C1_m et C2_m pour la condition", nom_conditions[condition], "sont :", Ci_m)
-            
-
 
         ## APPEND DES ARRAYS A TRACER
         if t == 0 :
 
             ARRAY_C0_m = np.append(ARRAY_C0_m, C0_m_t0)
-
             ARRAY_C1_m = np.append(ARRAY_C1_m, C1_m_t0)
-
             ARRAY_C2_m = np.append(ARRAY_C2_m, C2_m_t0)
 
             ARRAY_F01 = np.append(ARRAY_F01, FLUX_2puits (C1C2_ini, C0_m_t0, longueur_entrenoeuds, rayon_entrenoeuds)[0])
-
             ARRAY_F02 = np.append(ARRAY_F02, FLUX_2puits (C1C2_ini, C0_m_t0, longueur_entrenoeuds, rayon_entrenoeuds)[1])
 
             ARRAY_RER1 = np.append(ARRAY_RER1, RER (C1C2_ini, v_i, k_i)[0])
-
             ARRAY_RER2 = np.append(ARRAY_RER2, RER (C1C2_ini, v_i, k_i)[1])
 
             ARRAY_U1 = np.append(ARRAY_U1, UTILISATION (C1C2_ini, v_i, k_i, V_t)[0])
-
             ARRAY_U2 = np.append(ARRAY_U2, UTILISATION (C1C2_ini, v_i, k_i, V_t)[1])
 
             ARRAY_volume_1 = np.append(ARRAY_volume_1, VARIABLE_VOLUME[0])
-
             ARRAY_volume_2 = np.append(ARRAY_volume_2, VARIABLE_VOLUME[1])
 
         else :
@@ -203,17 +195,13 @@ for condition, nom_condition in enumerate(nom_conditions) :
             ## ACTUALISATION VALEURS
 
             ARRAY_C0_m = np.append(ARRAY_C0_m, VARIABLE_C0_m)
-
             ARRAY_C1_m = np.append(ARRAY_C1_m, Ci_m[0])
-
             ARRAY_C2_m = np.append(ARRAY_C2_m, Ci_m[1])
 
             ARRAY_F01 = np.append(ARRAY_F01, FLUX_2puits (Ci_m, VARIABLE_C0_m, longueur_entrenoeuds, rayon_entrenoeuds)[0])
-
             ARRAY_F02 = np.append(ARRAY_F02, FLUX_2puits (Ci_m, VARIABLE_C0_m, longueur_entrenoeuds, rayon_entrenoeuds)[1])
 
             ARRAY_RER1 = np.append(ARRAY_RER1, RER (Ci_m, v_i, k_i)[0])
-
             ARRAY_RER2 = np.append(ARRAY_RER2, RER (Ci_m, v_i, k_i)[1])
 
             ARRAY_U1 = np.append(ARRAY_U1, UTILISATION (Ci_m, v_i, k_i, V_t)[0])
@@ -221,7 +209,6 @@ for condition, nom_condition in enumerate(nom_conditions) :
             ARRAY_U2 = np.append(ARRAY_U2, UTILISATION (Ci_m, v_i, k_i, V_t)[1])
 
             ARRAY_volume_1 = np.append(ARRAY_volume_1, VARIABLE_VOLUME[0])
-
             ARRAY_volume_2 = np.append(ARRAY_volume_2, VARIABLE_VOLUME[1])
         ## APPEND DES ARRAYS A TRACER
 
@@ -231,37 +218,27 @@ for condition, nom_condition in enumerate(nom_conditions) :
         # PLOTTING FLUX VAR
         FLUX01_HH, = ax[0,0].plot(range(0, 300, degre_jour), ARRAY_F01, color="red", marker="+", label = "puits_1 HH", linestyle="dashdot")
         FLUX02_HH, = ax[0,0].plot(range(0, 300, degre_jour), ARRAY_F02, color="black", marker="+", label = "puits_2 HH", linestyle="dashdot")
-        ax[0,0].set_title("FLUX01 et FLUX02 var")
-        ax[0,0].set_ylabel("umolC/°Cj", color="black", fontsize=14)
         # PLOTTING FLUX VAR
 
         # PLOTTING UTILISATION VAR
         U1_HH, = ax[1,0].plot(range(0, 300, degre_jour), ARRAY_U1, color="red", marker="+", linestyle="dashdot")
         U2_HH, = ax[1,0].plot(range(0, 300, degre_jour), ARRAY_U2, color="black", marker="+", linestyle="dashdot")
-        ax[1,0].set_title("U1 et U2 var")
-        ax[1,0].set_ylabel("umolC/°Cj", color="black", fontsize=14)
         # PLOTTING UTILISATION VAR
 
         # PLOTTING RER VAR
         RER1_HH, = ax[1,1].plot(range(0, 300, degre_jour), ARRAY_RER1, color="red", marker="+", linestyle="dashdot")
         RER2_HH, = ax[1,1].plot(range(0, 300, degre_jour), ARRAY_RER2, color="black", marker="+", linestyle="dashdot")
-        ax[1,1].set_title("RER1 et RER2 var")
-        ax[1,1].set_ylabel("/°Cj", color="black", fontsize=14)
         # PLOTTING RER VAR
 
         # PLOTTING CI_M VAR
         C0_m_HH, = ax[2,1].plot(range(0, 300, degre_jour), ARRAY_C0_m, color="pink", marker="+", linestyle="dashdot")
         C1_m_HH, = ax[0,1].plot(range(0, 300, degre_jour), ARRAY_C1_m, color="red", marker="+", linestyle="dashdot")
         C2_m_HH, = ax[0,1].plot(range(0, 300, degre_jour), ARRAY_C2_m, color="black", marker="+", linestyle="dashdot")
-        ax[0,1].set_title("C1_m et C2_m var")
-        ax[0,1].set_ylabel("umol/m3", color="black", fontsize=14)
         # PLOTTING CI_M VAR
 
         # PLOTTING VOLUME VAR
         V1_HH, = ax[2,0].plot(range(0, 300, degre_jour), ARRAY_volume_1, color="red", marker="+", linestyle="dashdot")
         V2_HH, = ax[2,0].plot(range(0, 300, degre_jour), ARRAY_volume_2, color="black", marker="+", linestyle="dashdot")
-        ax[2,0].set_title("V1 et V2 var")
-        ax[2,0].set_ylabel("umolC/°Cj", color="black", fontsize=14)
         # PLOTTING VOLUME VAR
 
     # IF ON EST EN LH
@@ -270,37 +247,27 @@ for condition, nom_condition in enumerate(nom_conditions) :
         # PLOTTING FLUX VAR
         FLUX01_LH, = ax[0,0].plot(range(0, 300, degre_jour), ARRAY_F01, color="orange", marker="+", label = "puits_1 LH")
         FLUX02_LH, = ax[0,0].plot(range(0, 300, degre_jour), ARRAY_F02, color="blue", marker="+", label = "puits_2 LH")
-        ax[0,0].set_title("FLUX01 et FLUX02 var")
-        ax[0,0].set_ylabel("umolC/°Cj", color="black", fontsize=14)
         # PLOTTING FLUX VAR
 
         # PLOTTING UTILISATION VAR
         U1_LH, = ax[1,0].plot(range(0, 300, degre_jour), ARRAY_U1, color="orange", marker="+")
         U2_LH, = ax[1,0].plot(range(0, 300, degre_jour), ARRAY_U2, color="blue", marker="+")
-        ax[1,0].set_title("U1 et U2 var")
-        ax[1,0].set_ylabel("umolC/°Cj", color="black", fontsize=14)
         # PLOTTING UTILISATION VAR
 
         # PLOTTING RER VAR
         RER1_LH, = ax[1,1].plot(range(0, 300, degre_jour), ARRAY_RER1, color="orange", marker="+")
         RER2_LH, = ax[1,1].plot(range(0, 300, degre_jour), ARRAY_RER2, color="blue", marker="+")
-        ax[1,1].set_title("RER1 et RER2 var")
-        ax[1,1].set_ylabel("/°Cj", color="black", fontsize=14)
         # PLOTTING RER VAR
 
         # PLOTTING CI_M VAR
         C0_m_LH, = ax[2,1].plot(range(0, 300, degre_jour), ARRAY_C0_m, color="pink", marker="+", linestyle="dashdot")
         C1_m_LH, = ax[0,1].plot(range(0, 300, degre_jour), ARRAY_C1_m, color="orange", marker="+")
         C2_m_LH, = ax[0,1].plot(range(0, 300, degre_jour), ARRAY_C2_m, color="blue", marker="+")
-        ax[0,1].set_title("C1_m et C2_m var")
-        ax[0,1].set_ylabel("umol/m3", color="black", fontsize=14)
         # PLOTTING CI_M VAR
 
         # PLOTTING VOLUME VAR
         V1_LH, = ax[2,0].plot(range(0, 300, degre_jour), ARRAY_volume_1, color="orange", marker="+")
         V2_LH, = ax[2,0].plot(range(0, 300, degre_jour), ARRAY_volume_2, color="blue", marker="+")
-        ax[2,0].set_title("V1 et V2 var")
-        ax[2,0].set_ylabel("umolC/°Cj", color="black", fontsize=14)
         # PLOTTING VOLUME VAR
 
     # IF ON EST EN LL
@@ -308,39 +275,28 @@ for condition, nom_condition in enumerate(nom_conditions) :
         # PLOTTING FLUX VAR
         FLUX01_LL, = ax[0,0].plot(range(0, 300, degre_jour), ARRAY_F01, color="yellow", marker="+", label = "puits_1 LL", linestyle="dashed")
         FLUX02_LL, = ax[0,0].plot(range(0, 300, degre_jour), ARRAY_F02, color="cyan", marker="+", label = "puits_2 LL", linestyle="dashed")
-        ax[0,0].set_title("FLUX01 et FLUX02 var")
-        ax[0,0].set_ylabel("umolC/°Cj", color="black", fontsize=14)
         # PLOTTING FLUX VAR
 
         # PLOTTING UTILISATION VAR
         U1_LL, = ax[1,0].plot(range(0, 300, degre_jour), ARRAY_U1, color="yellow", marker="+", linestyle="dashed")
         U2_LL, = ax[1,0].plot(range(0, 300, degre_jour), ARRAY_U2, color="cyan", marker="+", linestyle="dashed")
-        ax[1,0].set_title("U1 et U2 var")
-        ax[1,0].set_ylabel("umolC/°Cj", color="black", fontsize=14)
         # PLOTTING UTILISATION VAR
 
         # PLOTTING RER VAR
         RER1_LL, = ax[1,1].plot(range(0, 300, degre_jour), ARRAY_RER1, color="yellow", marker="+", linestyle="dashed")
         RER2_LL, = ax[1,1].plot(range(0, 300, degre_jour), ARRAY_RER2, color="cyan", marker="+", linestyle="dashed")
-        ax[1,1].set_title("RER1 et RER2 var")
-        ax[1,1].set_ylabel("/°Cj", color="black", fontsize=14)
         # PLOTTING RER VAR
 
         # PLOTTING CI_M VAR
         C0_m_LL, = ax[2,1].plot(range(0, 300, degre_jour), ARRAY_C0_m, color="pink", marker="+", linestyle="dashdot")
         C1_m_LL, = ax[0,1].plot(range(0, 300, degre_jour), ARRAY_C1_m, color="yellow", marker="+", linestyle="dashed")
         C2_m_LL, = ax[0,1].plot(range(0, 300, degre_jour), ARRAY_C2_m, color="cyan", marker="+", linestyle="dashed")
-        ax[0,1].set_title("C1_m et C2_m var")
-        ax[0,1].set_ylabel("umol/m3", color="black", fontsize=14)
         # PLOTTING CI_M VAR
 
         # PLOTTING VOLUME VAR
         V1_LL, = ax[2,0].plot(range(0, 300, degre_jour), ARRAY_volume_1, color="yellow", marker="+", linestyle="dashed")
         V2_LL, = ax[2,0].plot(range(0, 300, degre_jour), ARRAY_volume_2, color="cyan", marker="+", linestyle="dashed")
-        ax[2,0].set_title("V1 et V2 var")
-        ax[2,0].set_ylabel("umolC/°Cj", color="black", fontsize=14)
-        # PLOTTING VOLUME VAR
-    
+        # PLOTTING VOLUME VAR 
     # ELSE ERROR SI ON EST NI HH NI LH NI LL
     else : 
         print("ERROR")
@@ -350,7 +306,25 @@ for condition, nom_condition in enumerate(nom_conditions) :
 print("FIN LOOP CONDITION _________________________")
 
 #### PLT SHOW
-plt.legend(handles=[FLUX01_HH, FLUX02_HH, FLUX01_LH, FLUX02_LH, FLUX01_LL, FLUX02_LL])
+ax[0,0].set_title("FLUX01 et FLUX02 var")
+ax[0,0].set_ylabel("umolC/°Cj", color="black", fontsize=14)
+
+ax[1,0].set_title("U1 et U2 var")
+ax[1,0].set_ylabel("umolC/°Cj", color="black", fontsize=14)
+
+ax[1,1].set_title("RER1 et RER2 var")
+ax[1,1].set_ylabel("/°Cj", color="black", fontsize=14)
+
+ax[0,1].set_title("C1_m et C2_m var")
+ax[0,1].set_ylabel("umol/m3", color="black", fontsize=14)
+
+ax[2,0].set_title("V1 et V2 var")
+ax[2,0].set_ylabel("m3", color="black", fontsize=14)
+
+ax[2,1].set_title("C0_m var")
+ax[2,1].set_ylabel("umolC/m3", color="black", fontsize=14)
+
+plt.legend(handles=[FLUX01_HH, FLUX01_LH, FLUX01_LL, FLUX02_HH, FLUX02_LH, FLUX02_LL])
 plt.show()
 #### PLT SHOW
 
