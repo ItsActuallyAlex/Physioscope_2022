@@ -137,8 +137,6 @@ def PLOT_FLUX (données_F01, données_F02) :
             ax[1,0].plot(np.linspace(0,300, 16), données_F01, color=LL_puits1, marker="+", label = "puits_1_LL")
             ax[1,0].plot(np.linspace(0,300, 16), données_F02, color=LL_puits2, marker="+", label = "puits_2_LL")
 
-    ax[1,0].legend()
-
 def PLOT_Cim (données_C1m, données_C2m) : 
     if nom_condition == "HH" :
         ax[2,0].plot(np.linspace(0,300, 16), données_C1m, color=HH_puits1, marker="+", label = "puits_1_HH")
@@ -150,8 +148,6 @@ def PLOT_Cim (données_C1m, données_C2m) :
         else :
             ax[2,0].plot(np.linspace(0,300, 16), données_C1m, color=LL_puits1, marker="+", label = "puits_1_LL")
             ax[2,0].plot(np.linspace(0,300, 16), données_C2m, color=LL_puits2, marker="+", label = "puits_2_LL")
-
-    ax[2,0].legend()
 
 def PLOT_RERi (données_RER1, données_RER2) : 
     if nom_condition == "HH" :
@@ -165,8 +161,6 @@ def PLOT_RERi (données_RER1, données_RER2) :
             ax[3,0].plot(np.linspace(0,300, 16), données_RER1, color=LL_puits1, marker="+", label = "puits_1_LL")
             ax[3,0].plot(np.linspace(0,300, 16), données_RER2, color=LL_puits2, marker="+", label = "puits_2_LL")
 
-    ax[3,0].legend()
-
 def PLOT_Ui (données_U1, données_U2) : 
     if nom_condition == "HH" :
         ax[4,0].plot(np.linspace(0,300, 16), données_U1, color=HH_puits1, marker="+", label = "puits_1_HH")
@@ -178,8 +172,6 @@ def PLOT_Ui (données_U1, données_U2) :
         else :
             ax[4,0].plot(np.linspace(0,300, 16), données_U1, color=LL_puits1, marker="+", label = "puits_1_LL")
             ax[4,0].plot(np.linspace(0,300, 16), données_U2, color=LL_puits2, marker="+", label = "puits_2_LL")
-
-    ax[4,0].legend()
 
 def PLOT_Vi (données_V1, données_V2) : 
     if nom_condition == "HH" :
@@ -193,7 +185,7 @@ def PLOT_Vi (données_V1, données_V2) :
             ax[5,0].plot(np.linspace(0,300, 16), données_V1, color=LL_puits1, marker="+", label = "puits_1_LL")
             ax[5,0].plot(np.linspace(0,300, 16), données_V2, color=LL_puits2, marker="+", label = "puits_2_LL")
 
-    ax[5,0].legend()
+    ax[5,0].legend(title = "Traitement et puits", loc="upper right")
 
 
 def RESISTANCES (longueur_entrenoeuds, rayon_entrenoeuds) :
@@ -298,7 +290,7 @@ for condition, nom_condition in enumerate(nom_conditions) :
     for t in range(0, 300, degre_jour) :
 
         # RESOLUTION
-        Ci_m = scipy.fsolve(A_RESOUDRE, x0=(Ci_m), args=(C0_m_t0, longueur_entrenoeuds, rayon_entrenoeuds, v_i, k_i, VARIABLE_VOLUME), col_deriv=0, xtol=1.49012e-08, maxfev=0, band=None, epsfcn=None, factor=100, diag=None) 
+        Ci_m = scipy.fsolve(A_RESOUDRE, x0=(Ci_m), args=(VARIABLE_C0_m, longueur_entrenoeuds, rayon_entrenoeuds, v_i, k_i, VARIABLE_VOLUME), col_deriv=0, xtol=1.49012e-08, maxfev=0, band=None, epsfcn=None, factor=100, diag=None) 
         print("Les solutions à l'équilibre C1_m et C2_m pour la condition", nom_conditions[condition], "sont :", Ci_m)
 
         ## ACTUALISATION C0_m
@@ -334,7 +326,7 @@ for condition, nom_condition in enumerate(nom_conditions) :
     PLOT_Ui(ARRAY_U1, ARRAY_U2)
     PLOT_Vi(ARRAY_volume_1, ARRAY_volume_2)
 
-
+    print(ARRAY_F01)
 
     print("_________________________")
 print("FIN LOOP CONDITION _________________________")
