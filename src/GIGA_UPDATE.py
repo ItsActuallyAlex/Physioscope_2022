@@ -64,6 +64,22 @@ ax[4,1].plot(range(0, 300, 10), EXP_U1_LL, color=LL_puits1, marker="+")
 ax[5,1].plot(range(0, 300, 10), EXP_V1_HH, color=HH_puits1, marker="+")
 ax[5,1].plot(range(0, 300, 10), EXP_V1_LH, color=LH_puits1, marker="+")
 ax[5,1].plot(range(0, 300, 10), EXP_V1_LL, color=LL_puits1, marker="+")
+
+ax[1,1].set_xticklabels(range(0, 300, 10), fontsize= 7)
+ax[2,1].set_xticklabels(range(0, 300, 10), fontsize= 7)
+ax[3,1].set_xticklabels(range(0, 300, 10), fontsize= 7)
+ax[4,1].set_xticklabels(range(0, 300, 10), fontsize= 7)
+ax[5,1].set_xticklabels(range(0, 300, 10), fontsize= 7)
+
+ax[1,1].set_yticklabels(range(0, 300, 10), fontsize= 7)
+ax[2,1].set_yticklabels(range(0, 300, 10), fontsize= 7)
+ax[3,1].set_yticklabels(range(0, 300, 10), fontsize= 7)
+ax[4,1].set_yticklabels(range(0, 300, 10), fontsize= 7)
+ax[5,1].set_yticklabels(range(0, 300, 10), fontsize= 7)
+
+
+ax[0, 1].axis('off')
+ax[1, 1].axis('off')
 #### DONNEES EXPERIMETALES
 
 #### CONSTANTES
@@ -123,6 +139,8 @@ def PLOT_C0m (données_C0m) :
         else :
             ax[0,0].plot(np.linspace(0,300, 16), données_C0m, color=LL_source0, marker="+", label = "source_0_LL")
 
+    ax[0,0].set_xticklabels(np.linspace(0,300, 16), fontsize= 7)
+    ax[0,0].set_yticklabels(np.linspace(0,300, 16), fontsize= 7)
     ax[0,0].legend()
 
 def PLOT_FLUX (données_F01, données_F02) : 
@@ -137,6 +155,10 @@ def PLOT_FLUX (données_F01, données_F02) :
             ax[1,0].plot(np.linspace(0,300, 16), données_F01, color=LL_puits1, marker="+", label = "puits_1_LL")
             ax[1,0].plot(np.linspace(0,300, 16), données_F02, color=LL_puits2, marker="+", label = "puits_2_LL")
 
+    ax[1,0].set_xticklabels(np.linspace(0,300, 16), fontsize= 7)
+    ax[1,0].set_yticklabels(np.linspace(0,300, 16), fontsize= 7)
+
+
 def PLOT_Cim (données_C1m, données_C2m) : 
     if nom_condition == "HH" :
         ax[2,0].plot(np.linspace(0,300, 16), données_C1m, color=HH_puits1, marker="+", label = "puits_1_HH")
@@ -148,6 +170,9 @@ def PLOT_Cim (données_C1m, données_C2m) :
         else :
             ax[2,0].plot(np.linspace(0,300, 16), données_C1m, color=LL_puits1, marker="+", label = "puits_1_LL")
             ax[2,0].plot(np.linspace(0,300, 16), données_C2m, color=LL_puits2, marker="+", label = "puits_2_LL")
+
+    ax[2,0].set_xticklabels(np.linspace(0,300, 16), fontsize= 7)
+    ax[2,0].set_yticklabels(np.linspace(0,300, 16), fontsize= 7)
 
 def PLOT_RERi (données_RER1, données_RER2) : 
     if nom_condition == "HH" :
@@ -161,6 +186,9 @@ def PLOT_RERi (données_RER1, données_RER2) :
             ax[3,0].plot(np.linspace(0,300, 16), données_RER1, color=LL_puits1, marker="+", label = "puits_1_LL")
             ax[3,0].plot(np.linspace(0,300, 16), données_RER2, color=LL_puits2, marker="+", label = "puits_2_LL")
 
+    ax[3,0].set_xticklabels(np.linspace(0,300, 16), fontsize= 7)
+    ax[3,0].set_yticklabels(np.linspace(0,300, 16), fontsize= 7)
+
 def PLOT_Ui (données_U1, données_U2) : 
     if nom_condition == "HH" :
         ax[4,0].plot(np.linspace(0,300, 16), données_U1, color=HH_puits1, marker="+", label = "puits_1_HH")
@@ -172,6 +200,9 @@ def PLOT_Ui (données_U1, données_U2) :
         else :
             ax[4,0].plot(np.linspace(0,300, 16), données_U1, color=LL_puits1, marker="+", label = "puits_1_LL")
             ax[4,0].plot(np.linspace(0,300, 16), données_U2, color=LL_puits2, marker="+", label = "puits_2_LL")
+
+    ax[4,0].set_xticklabels(np.linspace(0,300, 16), fontsize= 7)
+    ax[4,0].set_yticklabels(np.linspace(0,300, 16), fontsize= 7)
 
 def PLOT_Vi (données_V1, données_V2) : 
     if nom_condition == "HH" :
@@ -185,6 +216,8 @@ def PLOT_Vi (données_V1, données_V2) :
             ax[5,0].plot(np.linspace(0,300, 16), données_V1, color=LL_puits1, marker="+", label = "puits_1_LL")
             ax[5,0].plot(np.linspace(0,300, 16), données_V2, color=LL_puits2, marker="+", label = "puits_2_LL")
 
+    ax[5,0].set_xticklabels(np.linspace(0,300, 16), fontsize= 7)
+    ax[5,0].set_yticklabels(np.linspace(0,300, 16), fontsize= 7)
     ax[5,0].legend(title = "Traitement et puits", loc="upper right")
 
 
@@ -332,23 +365,35 @@ for condition, nom_condition in enumerate(nom_conditions) :
 print("FIN LOOP CONDITION _________________________")
 
 #### PLT SHOW
-ax[0,0].set_title("C0m")
-ax[0,0].set_ylabel("umolC/°Cj", color="black", fontsize=14)
+ax[0,0].set_title("C0m", fontsize=7)
+ax[0,0].set_ylabel("umolC/°Cj", color="black", fontsize=7)
 
-ax[1,0].set_title("FLUX01 et FLUX02")
-ax[1,0].set_ylabel("umolC/°Cj", color="black", fontsize=14)
+ax[1,0].set_title("FLUX01 et FLUX02", fontsize=7)
+ax[1,0].set_ylabel("umolC/°Cj", color="black", fontsize=7)
 
-ax[2,0].set_title("C1_m et C2_m var")
-ax[2,0].set_ylabel("umol/m3", color="black", fontsize=14)
+ax[2,0].set_title("C1_m et C2_m var", fontsize=7)
+ax[2,0].set_ylabel("umol/m3", color="black", fontsize=7)
 
-ax[3,0].set_title("RER1 et RER2 var")
-ax[3,0].set_ylabel("/°Cj", color="black", fontsize=14)
+ax[3,0].set_title("RER1 et RER2 var", fontsize=7)
+ax[3,0].set_ylabel("/°Cj", color="black", fontsize=7)
 
-ax[4,0].set_title("U1 et U2 var")
-ax[4,0].set_ylabel("umolC/°Cj", color="black", fontsize=14)
+ax[4,0].set_title("U1 et U2 var", fontsize=7)
+ax[4,0].set_ylabel("umolC/°Cj", color="black", fontsize=7)
 
-ax[5,0].set_title("V1 et V2")
-ax[5,0].set_ylabel("m3", color="black", fontsize=14)
+ax[5,0].set_title("V1 et V2", fontsize=7)
+ax[5,0].set_ylabel("m3", color="black", fontsize=7)
+
+ax[2,1].set_title("C1_m et C2_m var", fontsize=7)
+ax[2,1].set_ylabel("umol/m3", color="black", fontsize=7)
+
+ax[3,1].set_title("RER1 et RER2 var", fontsize=7)
+ax[3,1].set_ylabel("/°Cj", color="black", fontsize=7)
+
+ax[4,1].set_title("U1 et U2 var", fontsize=7)
+ax[4,1].set_ylabel("umolC/°Cj", color="black", fontsize=7)
+
+ax[5,1].set_title("V1 et V2", fontsize=7)
+ax[5,1].set_ylabel("m3", color="black", fontsize=7)
 
 plt.show()
 #### PLT SHOW
