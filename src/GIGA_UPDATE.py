@@ -46,12 +46,13 @@ LH_source0 = "#A49E23"
 LL_source0 = "#4C4910"
 
 # Ci_m
-ax[2,1].scatter(DATES, EXP_C1m_HH, color=HH_puits1, marker="+")
-ax[2,1].scatter(DATES, EXP_C1m_LH, color=LH_puits1, marker="+")
-ax[2,1].scatter(DATES, EXP_C1m_LL, color=LL_puits1, marker="+")
-ax[2,1].scatter(DATES, EXP_C2m_HH, color=HH_puits2, marker="+")
-ax[2,1].scatter(DATES, EXP_C2m_LH, color=LH_puits2, marker="+")
-ax[2,1].scatter(DATES, EXP_C2m_LL, color=LL_puits2, marker="+")
+ax[2,1].scatter(DATES, EXP_C1m_HH, color="yellow", marker="+", label = "C1_m HH")
+ax[2,1].scatter(DATES, EXP_C1m_LH, color="orange", marker="+", label = "C1_m LH")
+ax[2,1].scatter(DATES, EXP_C1m_LL, color="red", marker="+", label = "C1_m LL")
+ax[2,1].scatter(DATES, EXP_C2m_HH, color="cyan", marker="+", label = "C2_m LL")
+ax[2,1].scatter(DATES, EXP_C2m_LH, color="blue", marker="+", label = "C2_m LL")
+ax[2,1].scatter(DATES, EXP_C2m_LL, color="black", marker="+", label = "C2_m LL")
+ax[2,1].legend(title = "Traitement et puits", fontsize= 7)
 
 ax[3,1].plot(range(0, 300, 10), EXP_RER1_HH, color=HH_puits1, marker="+")
 ax[3,1].plot(range(0, 300, 10), EXP_RER1_LH, color=LH_puits1, marker="+")
@@ -65,18 +66,21 @@ ax[5,1].plot(range(0, 300, 10), EXP_V1_HH, color=HH_puits1, marker="+")
 ax[5,1].plot(range(0, 300, 10), EXP_V1_LH, color=LH_puits1, marker="+")
 ax[5,1].plot(range(0, 300, 10), EXP_V1_LL, color=LL_puits1, marker="+")
 
-ax[1,1].set_xticklabels(range(0, 300, 10), fontsize= 7)
-ax[2,1].set_xticklabels(range(0, 300, 10), fontsize= 7)
-ax[3,1].set_xticklabels(range(0, 300, 10), fontsize= 7)
-ax[4,1].set_xticklabels(range(0, 300, 10), fontsize= 7)
-ax[5,1].set_xticklabels(range(0, 300, 10), fontsize= 7)
+# ax[1,1].set_xticklabels(range(0, 300, 10), fontsize= 7)
+# ax[2,1].set_xticklabels(range(0, 300, 10), fontsize= 7)
+# ax[3,1].set_xticklabels(range(0, 300, 10), fontsize= 7)
+# ax[4,1].set_xticklabels(range(0, 300, 10), fontsize= 7)
+# ax[5,1].set_xticklabels(range(0, 300, 10), fontsize= 7)
 
-ax[1,1].set_yticklabels(range(0, 300, 10), fontsize= 7)
-ax[2,1].set_yticklabels(range(0, 300, 10), fontsize= 7)
-ax[3,1].set_yticklabels(range(0, 300, 10), fontsize= 7)
-ax[4,1].set_yticklabels(range(0, 300, 10), fontsize= 7)
-ax[5,1].set_yticklabels(range(0, 300, 10), fontsize= 7)
+# ax[1,1].set_yticklabels(range(0, 300, 10), fontsize= 7)
+# ax[2,1].set_yticklabels(range(0, 300, 10), fontsize= 7)
+# ax[3,1].set_yticklabels(range(0, 300, 10), fontsize= 7)
+# ax[4,1].set_yticklabels(range(0, 300, 10), fontsize= 7)
+# ax[5,1].set_yticklabels(range(0, 300, 10), fontsize= 7)
 
+ax[2,1].set_xlim([0,300])
+
+ax[2,1].legend(bbox_to_anchor=(1, 3))
 
 ax[0, 1].axis('off')
 ax[1, 1].axis('off')
@@ -95,23 +99,24 @@ degre_jour = 20
 BASE_longueur_entrenoeuds = np.array([4.339E-2, 4.339E-2, 4.339E-2], dtype=float)
 BASE_rayon_entrenoeuds = np.array([35.1E-6, 35.1E-6, 35.1E-6], dtype=float)
 
-# BASE_volume_ini_bourgeon = np.array([8.849E-10, 8.849E-10, 8.849E-10], dtype=float)
-# BASE_volume_ini_feuilles = np.array([4.422E-07, 4.422E-07, 4.422E-07], dtype=float)
-
-# VALEURS ACTUALISEES CAR JE SAIS PAS FAIRE DE CALCULS
 BASE_volume_ini_bourgeon = np.array([8.849E-10, 8.849E-10, 8.849E-10], dtype=float)
 BASE_volume_ini_feuilles = np.array([2.12668E-07, 3.15765E-07, 4.3972E-07], dtype=float)
 
+# Ci_m_t0 differents
+BASE_v1 = np.array([1.329E-02, 1.329E-02, 1.329E-02], dtype=float)
+BASE_k1 = np.array([2.773E+08, 2.773E+08, 2.773E+08], dtype=float)
+BASE_v2 = np.array([2.100E-02, 2.100E-02, 2.100E-02], dtype=float)
+BASE_k2 = np.array([5.358E+03, 5.358E+03, 5.358E+03], dtype=float)
 
-# BASES POUR PUITS SIMILAIRES
-BASE_v1 = np.array([1.186E-2, 6.747E-3, 6.747E-3], dtype=float)
-BASE_k1 = np.array([5.642E+11, 5.642E+11, 5.642E+11], dtype=float)
-BASE_v2 = np.array([2.100E-2, 2.100E-2, 2.100E-2], dtype=float)
-BASE_k2 = np.array([5.642E+11, 5.642E+11, 5.642E+11], dtype=float)
+# Ci_m_t0 identiques
+BASE_v1 = np.array([1.329E-02, 1.329E-02, 1.329E-02], dtype=float)
+BASE_k1 = np.array([1.387E+08, 1.387E+08, 1.387E+08], dtype=float)
+BASE_v2 = np.array([2.100E-02, 2.100E-02, 2.100E-02], dtype=float)
+BASE_k2 = np.array([1.387E+08, 1.387E+08, 1.387E+08], dtype=float)
 
-BASE_conc_ini_C0 = np.array([5.642E+11, 5.642E+11, 5.642E+11], dtype=float)
-BASE_conc_ini_C1 = np.array([5.642E+11, 5.642E+11, 5.642E+11], dtype=float)
-BASE_conc_ini_C2 = np.array([5.642E+11, 5.642E+11, 5.642E+11], dtype=float)
+BASE_conc_ini_C0 = np.array([1.525E+09, 1.525E+09, 1.525E+09], dtype=float)
+BASE_conc_ini_C1 = np.array([2.773E+08, 2.773E+08, 2.773E+08], dtype=float)
+BASE_conc_ini_C2 = np.array([5.358E+03, 5.358E+03, 5.358E+03], dtype=float)
 # BASES POUR PUITS SIMILAIRES
 #### VARIABLES ENTRE CONDITIONS
 
@@ -139,9 +144,9 @@ def PLOT_C0m (données_C0m) :
         else :
             ax[0,0].plot(np.linspace(0,300, 16), données_C0m, color=LL_source0, marker="+", label = "source_0_LL")
 
-    ax[0,0].set_xticklabels(np.linspace(0,300, 16), fontsize= 7)
-    ax[0,0].set_yticklabels(np.linspace(0,300, 16), fontsize= 7)
-    ax[0,0].legend()
+    # ax[0,0].set_xticklabels(np.linspace(0,300, 16), fontsize= 7)
+    # ax[0,0].set_yticklabels(np.linspace(0,300, 16), fontsize= 7)
+    ax[0,0].legend(fontsize= 7)
 
 def PLOT_FLUX (données_F01, données_F02) : 
     if nom_condition == "HH" :
@@ -155,9 +160,8 @@ def PLOT_FLUX (données_F01, données_F02) :
             ax[1,0].plot(np.linspace(0,300, 16), données_F01, color=LL_puits1, marker="+", label = "puits_1_LL")
             ax[1,0].plot(np.linspace(0,300, 16), données_F02, color=LL_puits2, marker="+", label = "puits_2_LL")
 
-    ax[1,0].set_xticklabels(np.linspace(0,300, 16), fontsize= 7)
-    ax[1,0].set_yticklabels(np.linspace(0,300, 16), fontsize= 7)
-
+    # ax[1,0].set_xticklabels(np.linspace(0,300, 16), fontsize= 7)
+    # ax[1,0].set_yticklabels(np.linspace(0,300, 16), fontsize= 7)
 
 def PLOT_Cim (données_C1m, données_C2m) : 
     if nom_condition == "HH" :
@@ -171,8 +175,8 @@ def PLOT_Cim (données_C1m, données_C2m) :
             ax[2,0].plot(np.linspace(0,300, 16), données_C1m, color=LL_puits1, marker="+", label = "puits_1_LL")
             ax[2,0].plot(np.linspace(0,300, 16), données_C2m, color=LL_puits2, marker="+", label = "puits_2_LL")
 
-    ax[2,0].set_xticklabels(np.linspace(0,300, 16), fontsize= 7)
-    ax[2,0].set_yticklabels(np.linspace(0,300, 16), fontsize= 7)
+    # ax[2,0].set_xticklabels(np.linspace(0,300, 16), fontsize= 7)
+    # ax[2,0].set_yticklabels(np.linspace(0,300, 16), fontsize= 7)
 
 def PLOT_RERi (données_RER1, données_RER2) : 
     if nom_condition == "HH" :
@@ -186,8 +190,8 @@ def PLOT_RERi (données_RER1, données_RER2) :
             ax[3,0].plot(np.linspace(0,300, 16), données_RER1, color=LL_puits1, marker="+", label = "puits_1_LL")
             ax[3,0].plot(np.linspace(0,300, 16), données_RER2, color=LL_puits2, marker="+", label = "puits_2_LL")
 
-    ax[3,0].set_xticklabels(np.linspace(0,300, 16), fontsize= 7)
-    ax[3,0].set_yticklabels(np.linspace(0,300, 16), fontsize= 7)
+    # ax[3,0].set_xticklabels(np.linspace(0,300, 16), fontsize= 7)
+    # ax[3,0].set_yticklabels(np.linspace(0,300, 16), fontsize= 7)
 
 def PLOT_Ui (données_U1, données_U2) : 
     if nom_condition == "HH" :
@@ -201,8 +205,8 @@ def PLOT_Ui (données_U1, données_U2) :
             ax[4,0].plot(np.linspace(0,300, 16), données_U1, color=LL_puits1, marker="+", label = "puits_1_LL")
             ax[4,0].plot(np.linspace(0,300, 16), données_U2, color=LL_puits2, marker="+", label = "puits_2_LL")
 
-    ax[4,0].set_xticklabels(np.linspace(0,300, 16), fontsize= 7)
-    ax[4,0].set_yticklabels(np.linspace(0,300, 16), fontsize= 7)
+    # ax[4,0].set_xticklabels(np.linspace(0,300, 16), fontsize= 7)
+    # ax[4,0].set_yticklabels(np.linspace(0,300, 16), fontsize= 7)
 
 def PLOT_Vi (données_V1, données_V2) : 
     if nom_condition == "HH" :
@@ -216,9 +220,10 @@ def PLOT_Vi (données_V1, données_V2) :
             ax[5,0].plot(np.linspace(0,300, 16), données_V1, color=LL_puits1, marker="+", label = "puits_1_LL")
             ax[5,0].plot(np.linspace(0,300, 16), données_V2, color=LL_puits2, marker="+", label = "puits_2_LL")
 
-    ax[5,0].set_xticklabels(np.linspace(0,300, 16), fontsize= 7)
-    ax[5,0].set_yticklabels(np.linspace(0,300, 16), fontsize= 7)
-    ax[5,0].legend(title = "Traitement et puits", loc="upper right")
+    # ax[5,0].set_xticklabels(np.linspace(0,300, 16), fontsize= 7)
+    # ax[5,0].set_yticklabels(np.linspace(0,300, 16), fontsize= 7)
+    ax[5,0].legend(title = "Traitement et puits", loc="upper right", fontsize= 7, bbox_to_anchor=(1.85, 6.4))
+
 
 
 def RESISTANCES (longueur_entrenoeuds, rayon_entrenoeuds) :
@@ -249,27 +254,28 @@ def FLUX_2puits (Ci_m, C0_m, longueur_entrenoeuds, rayon_entrenoeuds) :
 
     return eq
 
-def RER (Ci_m, v_i, k_i) :
+def RER (Ci_m, v_i, k_i, signal) :
     
-    eq = (v_i * Ci_m)/(k_i + Ci_m)
+    eq = ((v_i * Ci_m)/(k_i + Ci_m))*signal
+    # eq = np.array([1,1])
 
     return eq
 
-def VOLUME(Ci_m, v_i, k_i, V_t) :
+def VOLUME(Ci_m, v_i, k_i, signal, VARIABLE_VOLUME) :
 
-    eq = V_t + (RER (Ci_m, v_i, k_i) * V_t)
+    eq = VARIABLE_VOLUME + (RER (Ci_m, v_i, k_i, signal) * VARIABLE_VOLUME)
 
     return eq
 
-def UTILISATION (Ci_m, v_i, k_i, V_t) :
+def UTILISATION (Ci_m, v_i, k_i, signal, VARIABLE_VOLUME) :
     
-    eq = delta * V_t * RER (Ci_m, v_i, k_i)
+    eq = delta * VARIABLE_VOLUME * RER (Ci_m, v_i, k_i, signal)
 
     return eq
 
-def A_RESOUDRE (Ci_m, C0_m, longueur_entrenoeuds, rayon_entrenoeuds, v_i, k_i, V_t) :
+def A_RESOUDRE (Ci_m, C0_m, longueur_entrenoeuds, rayon_entrenoeuds, v_i, k_i, signal, VARIABLE_VOLUME) :
 
-    eq = C0_m*FLUX_2puits (Ci_m, C0_m, longueur_entrenoeuds, rayon_entrenoeuds) - UTILISATION (Ci_m, v_i, k_i, V_t)
+    eq = C0_m*FLUX_2puits (Ci_m, C0_m, longueur_entrenoeuds, rayon_entrenoeuds) - UTILISATION (Ci_m, v_i, k_i, signal, VARIABLE_VOLUME)
 
     return eq
 #### FONCTIONS
@@ -278,6 +284,24 @@ def A_RESOUDRE (Ci_m, C0_m, longueur_entrenoeuds, rayon_entrenoeuds, v_i, k_i, V
 print("DEBUT LOOP CONDITION _________________________")
 for condition, nom_condition in enumerate(nom_conditions) : 
     print("_________________________")
+    
+    # IMPLEMENTATION DEBOURREMENT      
+    if nom_condition == "HH" :
+        signal = np.array([1, 1])
+    else :
+        if nom_condition == "LH" :
+            signal = np.array([1, 0.5])
+        else :
+            signal = np.array([1, 0.25])
+    # IMPLEMENTATION DEBOURREMENT      
+
+    ## INCREMENT C0_m
+    if nom_condition == "LL"  :
+        increment_C0_m = 0.0066 
+        
+    else :
+        increment_C0_m = 0.05
+    ## INCREMENT C0_m   
 
     v_i = np.array([BASE_v1[condition], BASE_v2[condition]])
     k_i = np.array([BASE_k1[condition], BASE_k2[condition]])
@@ -291,10 +315,7 @@ for condition, nom_condition in enumerate(nom_conditions) :
     C1C2_ini = np.array([C1_m_t0, C2_m_t0])
     Ci_m = C1C2_ini
 
-    V_t0 = np.array([BASE_volume_ini_feuilles[condition], BASE_volume_ini_bourgeon[condition]])
-    V_t = V_t0
-
-    VARIABLE_VOLUME = V_t0
+    VARIABLE_VOLUME = np.array([BASE_volume_ini_feuilles[condition], BASE_volume_ini_bourgeon[condition]])
     VARIABLE_C0_m = C0_m_t0
 
     # RESET SUR LES APPEND ENTRE CONDITIONS
@@ -303,27 +324,20 @@ for condition, nom_condition in enumerate(nom_conditions) :
     ARRAY_C2_m = np.array([C2_m_t0])
     ARRAY_F01 = np.array([FLUX_2puits (C1C2_ini, C0_m_t0, longueur_entrenoeuds, rayon_entrenoeuds)[0]])
     ARRAY_F02 = np.array([FLUX_2puits (C1C2_ini, C0_m_t0, longueur_entrenoeuds, rayon_entrenoeuds)[1]])
-    ARRAY_RER1 = np.array([RER (C1C2_ini, v_i, k_i)[0]])
-    ARRAY_RER2 = np.array([RER (C1C2_ini, v_i, k_i)[1]])
-    ARRAY_U1 = np.array([UTILISATION (C1C2_ini, v_i, k_i, V_t)[0]])
-    ARRAY_U2 = np.array([UTILISATION (C1C2_ini, v_i, k_i, V_t)[1]])
+    ARRAY_RER1 = np.array([RER (C1C2_ini, v_i, k_i, signal)[0]])
+    ARRAY_RER2 = np.array([RER (C1C2_ini, v_i, k_i, signal)[1]])
+    ARRAY_U1 = np.array([UTILISATION (C1C2_ini, v_i, k_i, signal, VARIABLE_VOLUME)[0]])
+    ARRAY_U2 = np.array([UTILISATION (C1C2_ini, v_i, k_i, signal,  VARIABLE_VOLUME)[1]])
     ARRAY_volume_1 = np.array([VARIABLE_VOLUME[0]])
     ARRAY_volume_2 = np.array([VARIABLE_VOLUME[1]])
     # RESET SUR LES APPEND ENTRE CONDITIONS
-    
-    ## INCREMENT C0_m
-    if nom_condition == "LL"  :
-        increment_C0_m = 0.0066 
-        
-    else :
-        increment_C0_m = 0.05
-    ## INCREMENT C0_m    
+ 
 
 ## BOUCLE RESOLUTION TEMPS ____________________________________________________________________________________________________________
     for t in range(0, 300, degre_jour) :
 
         # RESOLUTION
-        Ci_m = scipy.fsolve(A_RESOUDRE, x0=(Ci_m), args=(VARIABLE_C0_m, longueur_entrenoeuds, rayon_entrenoeuds, v_i, k_i, VARIABLE_VOLUME), col_deriv=0, xtol=1.49012e-08, maxfev=0, band=None, epsfcn=None, factor=100, diag=None) 
+        Ci_m = scipy.fsolve(A_RESOUDRE, x0=(Ci_m), args=(VARIABLE_C0_m, longueur_entrenoeuds, rayon_entrenoeuds, v_i, k_i, signal, VARIABLE_VOLUME), col_deriv=0, xtol=1.49012e-08, maxfev=0, band=None, epsfcn=None, factor=100, diag=None) 
         print("Les solutions à l'équilibre C1_m et C2_m pour la condition", nom_conditions[condition], "sont :", Ci_m)
 
         ## ACTUALISATION C0_m
@@ -331,7 +345,7 @@ for condition, nom_condition in enumerate(nom_conditions) :
         ## ACTUALISATION C0_m
 
         ## ACTUALISATION VOLUME
-        VARIABLE_VOLUME = VOLUME(Ci_m, v_i, k_i, VARIABLE_VOLUME)
+        VARIABLE_VOLUME = VOLUME(Ci_m, v_i, k_i, signal, VARIABLE_VOLUME)
         ## ACTUALISATION VOLUME
 
         ## APPEND DES ARRAYS A TRACER
@@ -342,14 +356,17 @@ for condition, nom_condition in enumerate(nom_conditions) :
         ARRAY_F01 = np.append(ARRAY_F01, FLUX_2puits (Ci_m, VARIABLE_C0_m, longueur_entrenoeuds, rayon_entrenoeuds)[0])
         ARRAY_F02 = np.append(ARRAY_F02, FLUX_2puits (Ci_m, VARIABLE_C0_m, longueur_entrenoeuds, rayon_entrenoeuds)[1])
 
-        ARRAY_RER1 = np.append(ARRAY_RER1, RER (Ci_m, v_i, k_i)[0])
-        ARRAY_RER2 = np.append(ARRAY_RER2, RER (Ci_m, v_i, k_i)[1])
+        ARRAY_RER1 = np.append(ARRAY_RER1, RER (Ci_m, v_i, k_i, signal)[0])
+        ARRAY_RER2 = np.append(ARRAY_RER2, RER (Ci_m, v_i, k_i, signal)[1])
 
-        ARRAY_U1 = np.append(ARRAY_U1, UTILISATION (Ci_m, v_i, k_i, V_t)[0])
-        ARRAY_U2 = np.append(ARRAY_U2, UTILISATION (Ci_m, v_i, k_i, V_t)[1])
+        ARRAY_U1 = np.append(ARRAY_U1, UTILISATION (Ci_m, v_i, k_i, signal, VARIABLE_VOLUME)[0])
+        ARRAY_U2 = np.append(ARRAY_U2, UTILISATION (Ci_m, v_i, k_i, signal, VARIABLE_VOLUME)[1])
 
         ARRAY_volume_1 = np.append(ARRAY_volume_1, VARIABLE_VOLUME[0])
         ARRAY_volume_2 = np.append(ARRAY_volume_2, VARIABLE_VOLUME[1])
+
+        # print("VOLUME SES GRANDS MORTS", VOLUME(Ci_m, v_i, k_i, signal, VARIABLE_VOLUME)[0])
+        print("RER DE MES DEUX", RER (Ci_m, v_i, k_i, signal)[0])
         ## APPEND DES ARRAYS A TRACER
 
     PLOT_C0m(ARRAY_C0_m)
@@ -359,7 +376,6 @@ for condition, nom_condition in enumerate(nom_conditions) :
     PLOT_Ui(ARRAY_U1, ARRAY_U2)
     PLOT_Vi(ARRAY_volume_1, ARRAY_volume_2)
 
-    print(ARRAY_F01)
 
     print("_________________________")
 print("FIN LOOP CONDITION _________________________")
