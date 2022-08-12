@@ -85,18 +85,19 @@ BASE_volume_ini_feuilles = np.array([2.12668E-07, 2.12668E-07, 2.12668E-07], dty
 # BASE_k2 = np.array([1.387E+08, 1.387E+08, 1.387E+08], dtype=float)
 
 BASE_v1 = np.array([1.779E-02, 1.329E-02, 1.329E-02], dtype=float)
-BASE_k1 = np.array([1.387E+08, 1.387E+08, 1.387E+08], dtype=float)
+BASE_k1 = np.array([20*1.387E+08, 20*1.387E+08, 20*1.387E+08], dtype=float)
 BASE_v2 = np.array([2.100E-02, 2.100E-02, 2.100E-02], dtype=float)
-BASE_k2 = np.array([1.387E+08, 1.387E+08, 1.387E+08], dtype=float)
+BASE_k2 = np.array([20*1.387E+08, 20*1.387E+08, 20*1.387E+08], dtype=float)
 
-BASE_conc_ini_C0 = np.array([1.525E+09, 1.525E+09, 1.525E+09], dtype=float)
-BASE_conc_ini_C1 = np.array([2.773E+08, 2.773E+08, 2.773E+08], dtype=float)
-BASE_conc_ini_C2 = np.array([5.358E+03, 5.358E+03, 5.358E+03], dtype=float)
+
 
 # BASE_conc_ini_C0 = np.array([1.525E+09, 1.525E+09, 1.525E+09], dtype=float)
-# BASE_conc_ini_C1 = np.array([2.773E+08, 2.773E+08, 2.773E+08], dtype=float)
-# BASE_conc_ini_C2 = np.array([2.773E+08, 2.773E+08, 2.773E+08], dtype=float)
+# BASE_conc_ini_C1 = np.array([1.387E+08, 1.387E+08, 1.387E+08], dtype=float)
+# BASE_conc_ini_C2 = np.array([5.358E+03, 5.358E+03, 5.358E+03], dtype=float)
 
+BASE_conc_ini_C0 = np.array([150*1.525E+09, 150*1.525E+09, 150*1.525E+09], dtype=float)
+BASE_conc_ini_C1 = np.array([20*1.387E+08, 20*1.387E+08, 20*1.387E+08], dtype=float)
+BASE_conc_ini_C2 = np.array([20*1.387E+08, 20*1.387E+08, 20*1.387E+08], dtype=float)
 #### VARIABLES ENTRE CONDITIONS
 
 #### ARRAYS INIT
@@ -215,8 +216,8 @@ def RESISTANCES (longueur_entrenoeuds, rayon_entrenoeuds) :
     eq = constante_resistance * (longueur_entrenoeuds)/(rayon_entrenoeuds**4)
 
     # 3 fois la même valeur R0 R1 R2
-    E = 10
-    eq = eq*E**(-6)
+    # E = 10
+    # eq = eq*E**(-1)
 
     eq = np.append(eq, (eq,eq))
 
@@ -232,8 +233,8 @@ def FLUX_2puits (Ci_m, C0_m, longueur_entrenoeuds, rayon_entrenoeuds) :
     R_2 = R_[2]
     denominateur = R_0*(R_1+R_2)+R_1*R_2
 
-    F01 = (R_2*(C0_m-Ci_m[0]) + R_0*(Ci_m[1]-Ci_m[0])) / (denominateur)
-    F02 = (R_1*(C0_m-Ci_m[1]) + R_0*(Ci_m[0]-Ci_m[1])) / (denominateur)
+    F01 = C0_m*((R_2*(C0_m-Ci_m[0]) + R_0*(Ci_m[1]-Ci_m[0])) / (denominateur))
+    F02 = C0_m*((R_1*(C0_m-Ci_m[1]) + R_0*(Ci_m[0]-Ci_m[1])) / (denominateur))
 
     eq = np.append(F01,F02)
 
@@ -260,10 +261,11 @@ def UTILISATION (Ci_m, v_i, k_i, VARIABLE_VOLUME) :
 
 def A_RESOUDRE (Ci_m, C0_m, longueur_entrenoeuds, rayon_entrenoeuds, v_i, k_i, VARIABLE_VOLUME) :
 
-    eq = C0_m*FLUX_2puits (Ci_m, C0_m, longueur_entrenoeuds, rayon_entrenoeuds) - UTILISATION (Ci_m, v_i, k_i, VARIABLE_VOLUME)
+    eq = FLUX_2puits (Ci_m, C0_m, longueur_entrenoeuds, rayon_entrenoeuds) - UTILISATION (Ci_m, v_i, k_i, VARIABLE_VOLUME)
 
     return eq
 #### FONCTIONS
+
 
 #### SOLVING
 print("DEBUT LOOP CONDITION _________________________")
@@ -272,10 +274,10 @@ for condition, nom_condition in enumerate(nom_conditions) :
 
     ## INCREMENT C0_m
     if nom_condition == "LL"  :
-        increment_C0_m = 0.0066 
+        increment_C0_m = 0.0066E+11
         
     else :
-        increment_C0_m = 0.05
+        increment_C0_m = 0.05E+11
     ## INCREMENT C0_m   
 
     v_i = np.array([BASE_v1[condition], BASE_v2[condition]])
@@ -306,20 +308,29 @@ for condition, nom_condition in enumerate(nom_conditions) :
     ARRAY_volume_1 = np.array([VARIABLE_VOLUME[0]])
     ARRAY_volume_2 = np.array([VARIABLE_VOLUME[1]])
     # RESET SUR LES APPEND ENTRE CONDITIONS
- 
+
+    aaaaaa1 = UTILISATION (Ci_m, v_i, k_i, VARIABLE_VOLUME)[0]
+    aaaaaa2 = UTILISATION (Ci_m, v_i, k_i, VARIABLE_VOLUME)[1]
+    print("U1_to", aaaaaa1, aaaaaa2)
 
 ## BOUCLE RESOLUTION TEMPS ____________________________________________________________________________________________________________
     for t in range(0, 300, degre_jour) :
+
 
         # RESOLUTION
         Ci_m = scipy.fsolve(A_RESOUDRE, x0=(Ci_m), args=(VARIABLE_C0_m, longueur_entrenoeuds, rayon_entrenoeuds, v_i, k_i, VARIABLE_VOLUME), col_deriv=0, xtol=1.49012e-08, maxfev=0, band=None, epsfcn=None, factor=100, diag=None) 
         print("Les solutions à l'équilibre C1_m et C2_m pour la condition", nom_conditions[condition], "sont :", Ci_m)
 
+        if Ci_m[0] <= 0 :
+            Ci_m[0] = 0
+        if Ci_m[1] <= 0 :
+            Ci_m[1] = 0
+
         ## ACTUALISATION C0_m
         VARIABLE_C0_m = VARIABLE_C0_m + increment_C0_m
         ## ACTUALISATION C0_m
 
-        
+       
         ## ACTUALISATION VOLUME ET DILUTION
         Mi_m = Ci_m * VARIABLE_VOLUME
         VARIABLE_VOLUME = VOLUME(Ci_m, v_i, k_i, VARIABLE_VOLUME)
@@ -398,7 +409,9 @@ print("FIN LOOP CONDITION _________________________")
 # print("C1M", ARRAY_C1_m_HH)
 # print("C2M", ARRAY_C2_m_HH)
 
-# print("RER1_LH", ARRAY_RER1_LH)
+print("U1", ARRAY_U1_HH)
+print("U2", ARRAY_U2_HH)
+
 
 
 fig, ax = plt.subplots(3,2)
@@ -469,27 +482,27 @@ ax[2,0].set_ylabel("m3", color="black", fontsize=7)
 ax[2,1].set_ylabel("m3", color="black", fontsize=7)
 
 
-fig, ax = plt.subplots(3,1)
-ax[0].plot(range(0, 300, 10), EXP_RER1_HH, color=HH_puits1, marker="+")
-ax[0].plot(range(0, 300, 10), EXP_RER1_LH, color=LH_puits1, marker="+")
-ax[0].plot(range(0, 300, 10), EXP_RER1_LL, color=LL_puits1, marker="+")
+# fig, ax = plt.subplots(3,1)
+# ax[0].plot(range(0, 300, 10), EXP_RER1_HH, color=HH_puits1, marker="+")
+# ax[0].plot(range(0, 300, 10), EXP_RER1_LH, color=LH_puits1, marker="+")
+# ax[0].plot(range(0, 300, 10), EXP_RER1_LL, color=LL_puits1, marker="+")
 
-ax[1].plot(range(0, 300, 10), EXP_U1_HH, color=HH_puits1, marker="+")
-ax[1].plot(range(0, 300, 10), EXP_U1_LH, color=LH_puits1, marker="+")
-ax[1].plot(range(0, 300, 10), EXP_U1_LL, color=LL_puits1, marker="+")
+# ax[1].plot(range(0, 300, 10), EXP_U1_HH, color=HH_puits1, marker="+")
+# ax[1].plot(range(0, 300, 10), EXP_U1_LH, color=LH_puits1, marker="+")
+# ax[1].plot(range(0, 300, 10), EXP_U1_LL, color=LL_puits1, marker="+")
 
-ax[2].plot(range(0, 300, 10), EXP_V1_HH, color=HH_puits1, marker="+")
-ax[2].plot(range(0, 300, 10), EXP_V1_LH, color=LH_puits1, marker="+")
-ax[2].plot(range(0, 300, 10), EXP_V1_LL, color=LL_puits1, marker="+")
+# ax[2].plot(range(0, 300, 10), EXP_V1_HH, color=HH_puits1, marker="+")
+# ax[2].plot(range(0, 300, 10), EXP_V1_LH, color=LH_puits1, marker="+")
+# ax[2].plot(range(0, 300, 10), EXP_V1_LL, color=LL_puits1, marker="+")
 
-ax[0].set_title("RER1 observé", fontsize=7)
-ax[0].set_ylabel("/°Cj", color="black", fontsize=7)
+# ax[0].set_title("RER1 observé", fontsize=7)
+# ax[0].set_ylabel("/°Cj", color="black", fontsize=7)
 
-ax[1].set_title("U1 observé", fontsize=7)
-ax[1].set_ylabel("umolC/°Cj", color="black", fontsize=7)
+# ax[1].set_title("U1 observé", fontsize=7)
+# ax[1].set_ylabel("umolC/°Cj", color="black", fontsize=7)
 
-ax[2].set_title("V1 observé", fontsize=7)
-ax[2].set_ylabel("m3", color="black", fontsize=7)
+# ax[2].set_title("V1 observé", fontsize=7)
+# ax[2].set_ylabel("m3", color="black", fontsize=7)
 #### PLT SHOW
 
 plt.show()
