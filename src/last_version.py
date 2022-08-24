@@ -1,11 +1,12 @@
-#### MODULES
+#### MODULES ___________________________________________________________________________________________________________________________________________________________
 import scipy.optimize as scipy 
 import matplotlib.pyplot as plt
 import numpy as np
 import math
-#### MODULES
+#### MODULES ___________________________________________________________________________________________________________________________________________________________
 
-#### DONNEES EXPERIMETALES
+
+#### DONNEES EXPERIMETALES _____________________________________________________________________________________________________________________________________________
 # EXP_C1m_HH = np.array([2.773E+08, np.nan, 1.232E+06], dtype=float)
 # EXP_C1m_LH = np.array([2.773E+08, 1.011E+06, 1.080E+06], dtype=float)
 # EXP_C1m_LL = np.array([2.773E+08, 3.954E+05, 5.763E+05], dtype=float)
@@ -26,73 +27,110 @@ EXP_V1_HH = np.array([1.28654E-06, 1.37811E-06, 1.47047E-06, 1.56305E-06, 1.6552
 EXP_V1_LH = np.array([1.78383E-06, 1.85435E-06, 1.92312E-06, 1.98983E-06, 2.05418E-06, 2.11589E-06, 2.17471E-06, 2.23043E-06, 2.28288E-06, 2.33193E-06, 2.37752E-06, 2.4196E-06, 2.45821E-06, 2.49341E-06, 2.52531E-06, 2.55405E-06, 2.5798E-06, 2.60276E-06, 2.62312E-06, 2.6411E-06, 2.65691E-06, 2.67077E-06, 2.68286E-06, 2.69339E-06, 2.70253E-06, 2.71044E-06, 2.71728E-06, 2.72317E-06, 2.72825E-06, 2.73261E-06])
 EXP_V1_LL = np.array([2.30537E-06, 2.40283E-06, 2.49838E-06, 2.59157E-06, 2.68196E-06, 2.76913E-06, 2.85269E-06, 2.9323E-06, 3.00768E-06, 3.07858E-06, 3.14484E-06, 3.20636E-06, 3.2631E-06, 3.31511E-06, 3.36248E-06, 3.40535E-06, 3.44394E-06, 3.47847E-06, 3.50922E-06, 3.53646E-06, 3.56048E-06, 3.58159E-06, 3.60006E-06, 3.61617E-06, 3.63018E-06, 3.64233E-06, 3.65284E-06, 3.66192E-06, 3.66975E-06, 3.67649E-06])
 DATES = np.array([0, 130, 240])
+#### DONNEES EXPERIMETALES _____________________________________________________________________________________________________________________________________________
 
 
-# ax[0, 1].axis('off')
-# ax[1, 1].axis('off')
-# ax[2, 1].axis('off')
-#### DONNEES EXPERIMETALES
-
-#### CONSTANTES
+#### CONSTANTES ________________________________________________________________________________________________________________________________________________________
 temp_20 = 293
 gaz_p = 8.314
 viscosity = 1E6
 nom_conditions = np.array(["HH", "LH", "LL"], dtype=str)
 delta = 1.694E+10
 degre_jour = 20
+correction_unite_resistance = 8.46E10
+#### CONSTANTES ________________________________________________________________________________________________________________________________________________________
 
-#### CONSTANTES
 
-#### VARIABLES ENTRE CONDITIONS
+#### VARIABLES INTERCONDITIONS _________________________________________________________________________________________________________________________________________
 BASE_longueur_entrenoeuds = np.array([4.339E-2, 4.339E-2, 4.339E-2], dtype=float)
+# BASE_longueur_entrenoeuds = np.array([20E-2, 20E-2, 20E-2], dtype=float)
 BASE_rayon_entrenoeuds = np.array([35.1E-6, 35.1E-6, 35.1E-6], dtype=float)
 
 BASE_volume_ini_bourgeon = np.array([8.849E-10, 8.849E-10, 8.849E-10], dtype=float)
-BASE_volume_ini_feuilles = np.array([2.12668E-07, 2.12668E-07, 2.12668E-07], dtype=float)
+BASE_volume_ini_feuilles = np.array([1.792E-06, 1.792E-06, 1.792E-06], dtype=float)
 
-# Ci_m_t0 identiques
+BASE_v1 = np.array([1.779E-02, 1.012E-02, 1.012E-02], dtype=float)
+BASE_k1 = np.array([1.183E+12, 1.183E+12, 1.183E+12], dtype=float)
+BASE_v2 = np.array([3.150E-02, 3.150E-02, 3.150E-02], dtype=float)
+BASE_k2 = np.array([2.099E+12, 2.099E+12, 2.099E+12], dtype=float)
+
+BASE_conc_ini_C0 = np.array([1.525E+09, 1.525E+09, 1.525E+09], dtype=float)
+# BASE_conc_ini_C0 = np.array([1E+08, 1E+08, 1E+08], dtype=float)
+BASE_conc_ini_C1 = np.array([2.773E+08, 2.773E+08, 2.773E+08], dtype=float)
+BASE_conc_ini_C2 = np.array([5.358E+03, 5.358E+03, 5.358E+03], dtype=float)
+#### VARIABLES INTERCONDITIONS _________________________________________________________________________________________________________________________________________
+
+
+# ### VARIABLES ENTRE CONDITIONS
+# BASE_longueur_entrenoeuds = np.array([4.339E-2, 4.339E-2, 4.339E-2], dtype=float)
+# BASE_rayon_entrenoeuds = np.array([35.1E-6, 35.1E-6, 35.1E-6], dtype=float)
+
+# BASE_volume_ini_bourgeon = np.array([8.849E-10, 8.849E-10, 8.849E-10], dtype=float)
+# BASE_volume_ini_feuilles = np.array([2.12668E-07, 2.12668E-07, 2.12668E-07], dtype=float)
+
+# # Ci_m_t0 identiques
+# # BASE_v1 = np.array([1.779E-02, 1.329E-02, 1.329E-02], dtype=float)
+# # BASE_k1 = np.array([1.387E+08, 1.387E+08, 1.387E+08], dtype=float)
+# # BASE_v2 = np.array([2.100E-02, 2.100E-02, 2.100E-02], dtype=float)
+# # BASE_k2 = np.array([1.387E+08, 1.387E+08, 1.387E+08], dtype=float)
+
 # BASE_v1 = np.array([1.779E-02, 1.329E-02, 1.329E-02], dtype=float)
-# BASE_k1 = np.array([1.387E+08, 1.387E+08, 1.387E+08], dtype=float)
+# BASE_k1 = np.array([20*1.387E+08, 20*1.387E+08, 20*1.387E+08], dtype=float)
 # BASE_v2 = np.array([2.100E-02, 2.100E-02, 2.100E-02], dtype=float)
-# BASE_k2 = np.array([1.387E+08, 1.387E+08, 1.387E+08], dtype=float)
-
-BASE_v1 = np.array([1.779E-02, 1.329E-02, 1.329E-02], dtype=float)
-BASE_k1 = np.array([20*1.387E+08, 20*1.387E+08, 20*1.387E+08], dtype=float)
-BASE_v2 = np.array([2.100E-02, 2.100E-02, 2.100E-02], dtype=float)
-BASE_k2 = np.array([20*1.387E+08, 20*1.387E+08, 20*1.387E+08], dtype=float)
+# BASE_k2 = np.array([20*1.387E+08, 20*1.387E+08, 20*1.387E+08], dtype=float)
 
 
 
-# BASE_conc_ini_C0 = np.array([1.525E+09, 1.525E+09, 1.525E+09], dtype=float)
-# BASE_conc_ini_C1 = np.array([1.387E+08, 1.387E+08, 1.387E+08], dtype=float)
-# BASE_conc_ini_C2 = np.array([5.358E+03, 5.358E+03, 5.358E+03], dtype=float)
+# # BASE_conc_ini_C0 = np.array([1.525E+09, 1.525E+09, 1.525E+09], dtype=float)
+# # BASE_conc_ini_C1 = np.array([1.387E+08, 1.387E+08, 1.387E+08], dtype=float)
+# # BASE_conc_ini_C2 = np.array([5.358E+03, 5.358E+03, 5.358E+03], dtype=float)
 
-BASE_conc_ini_C0 = np.array([150*1.525E+09, 150*1.525E+09, 150*1.525E+09], dtype=float)
-BASE_conc_ini_C1 = np.array([20*1.387E+08, 20*1.387E+08, 20*1.387E+08], dtype=float)
-BASE_conc_ini_C2 = np.array([20*1.387E+08, 20*1.387E+08, 20*1.387E+08], dtype=float)
-#### VARIABLES ENTRE CONDITIONS
+# BASE_conc_ini_C0 = np.array([150*1.525E+09, 150*1.525E+09, 150*1.525E+09], dtype=float)
+# BASE_conc_ini_C1 = np.array([20*1.387E+08, 20*1.387E+08, 20*1.387E+08], dtype=float)
+# BASE_conc_ini_C2 = np.array([20*1.387E+08, 20*1.387E+08, 20*1.387E+08], dtype=float)
+# #### VARIABLES ENTRE CONDITIONS
 
 
 #### FONCTIONS _________________________________________________________________________________________________________________________________________________________
 def RESISTANCES_T0 (longueur_entrenoeuds, rayon_entrenoeuds) :
-    eq = ((8*longueur_entrenoeuds*viscosity) /(rayon_entrenoeuds**4*math.pi)) / (gaz_p*temp_20)
+    # eq = (((8*longueur_entrenoeuds*viscosity) /(rayon_entrenoeuds**4*math.pi)) / (gaz_p*temp_20))*correction_unite_resistance
+    eq = np.array([5E18, 5E18, 5E18], dtype=float)
     eq[2] = eq[2] * 100
 
     return eq
 
 
-def SIGNAL_PUITS2 () :
-    if nom_condition == "HH" :
-        eq = 2
+def RESISTANCES_VARIATION (Ci_m, v_i, k_i, VARIABLE_VOLUME, longueur_entrenoeuds, rayon_entrenoeuds, resistances_temps_t) :
+        # SI T=0
+    if t == 0 :
+        eq = RESISTANCES_T0 (longueur_entrenoeuds, rayon_entrenoeuds)
+
+    else : 
+        eq = resistances_temps_t
+    
+    # si R2 baisse trop
+    if eq[2] <= eq[0] :
+        eq[2] = eq[0]
+
+    # Baisse classique R2
     else :
-        if nom_condition == "LH" :
-            eq = 1
-        else : 
-            eq = 0.5
+        eq[2] = eq[2] - eq[2] * UTILISATION(Ci_m, v_i, k_i, VARIABLE_VOLUME)[1]
+        # eq[2] = 1
+    
     return eq
 
 
-# DEFINIR signal_puits2
+def SIGNAL_PUITS2 () :
+    if nom_condition == "LH" :
+        eq = 3
+    else :
+        if nom_condition == "HH" :
+            eq = 1.5
+        else : 
+            eq = 0.25
+    return eq
+
+
 def RER (Ci_m, v_i, k_i) :
     signal_puits2 = SIGNAL_PUITS2 ()
 
@@ -117,7 +155,6 @@ def CROISSANCE_VOLUME (Ci_m, v_i, k_i, VARIABLE_VOLUME) :
     return eq
 
 
-# ATTENTION SI ON CHANGE LES VALEURS
 def C0M_VARIATION (C0_m) :
     ## INCREMENT C0_m
     if nom_condition == "LL" :
@@ -131,29 +168,6 @@ def C0M_VARIATION (C0_m) :
     return eq
 
 
-def RESISTANCES_VARIATION (Ci_m, v_i, k_i, VARIABLE_VOLUME, longueur_entrenoeuds, rayon_entrenoeuds, resistances_temps_t) :
-    # SI T=0
-    if t == 0 :
-        eq = RESISTANCES_T0 (longueur_entrenoeuds, rayon_entrenoeuds)
-        return eq
-
-    # SI T>0  
-    else :
-        # ANTI BAISSE R_2
-        if resistances_temps_t[2] <= resistances_temps_t[0] :
-            resistances_temps_t[2] = resistances_temps_t[0]
-            return resistances_temps_t
-
-        # BAISSE R_2 AVEC UTILISATION
-        else : 
-            resistances_temps_t[2] = resistances_temps_t[2] - resistances_temps_t[2] * UTILISATION(Ci_m, v_i, k_i, VARIABLE_VOLUME)[1]
-            # resistances_temps_t[2] = resistances_temps_t[2] * (1 - UTILISATION(Ci_m, v_i, k_i, VARIABLE_VOLUME)[1]/100)
-            return resistances_temps_t
-
-
-# resistances_temps_t = RESISTANCES_T0 (longueur_entrenoeuds, rayon_entrenoeuds)
-# resistances_temps_t = RESISTANCES_VARIATION (Ci_m, v_i, k_i, VARIABLE_VOLUME, longueur_entrenoeuds, rayon_entrenoeuds, resistances_temps_t)
-# VALEUR DE C0_M HYYYYYYYPER IMPORTANTE
 def FLUX_2puits (Ci_m, C0_m) :
     R_ = resistances_temps_t
     R_0 = R_[0]
@@ -196,8 +210,6 @@ for condition, nom_condition in enumerate(nom_conditions) :
     # deux values
     Ci_m = np.array([VARIABLE_C1_m, VARIABLE_C2_m])
     resistances_temps_t = RESISTANCES_T0 (longueur_entrenoeuds, rayon_entrenoeuds)
-    resistances_temps_t = resistances_temps_t*1E-3
-    print(resistances_temps_t)
     # SETUP DU T0
 
     ## RESET ARRAYS DATA
@@ -219,9 +231,12 @@ for condition, nom_condition in enumerate(nom_conditions) :
 
     #### BOUCLE TEMPS ______________________________________________________________________________________________________________________________________________________
     for t in range(0, 300, degre_jour) :
+
+            # print (RESISTANCES_VARIATION (Ci_m, v_i, k_i, VARIABLE_VOLUME, longueur_entrenoeuds, rayon_entrenoeuds, resistances_temps_t))
+
             # RESOLUTION CI_m
             Ci_m = scipy.fsolve(A_RESOUDRE, x0=(Ci_m), args=(VARIABLE_C0_m, v_i, k_i, VARIABLE_VOLUME), col_deriv=0, xtol=1.49012e-08, maxfev=0, band=None, epsfcn=None, factor=100, diag=None) 
-            print("Les solutions à l'équilibre C1_m et C2_m pour la condition", nom_conditions[condition], "sont :", Ci_m)
+            # print("Les solutions à l'équilibre C1_m et C2_m pour la condition", nom_conditions[condition], "sont :", Ci_m)
             # RESOLUTION CI_m
 
             # ANTI NEGATIF SUR C1_m et C2_m
@@ -261,7 +276,13 @@ for condition, nom_condition in enumerate(nom_conditions) :
             ARRAY_U1 = np.append(ARRAY_U1, UTILISATION (Ci_m, v_i, k_i, VARIABLE_VOLUME)[0])
             ARRAY_U2 = np.append(ARRAY_U2, UTILISATION (Ci_m, v_i, k_i, VARIABLE_VOLUME)[1])
             # ARRAYS POUR EXTRACTION DATA 
+
     #### BOUCLE TEMPS ______________________________________________________________________________________________________________________________________________________
+
+    # print("R2", ARRAY_R2)
+    # print("R2", ARRAY_R1)
+    # print("VOLUME 1", ARRAY_V1)
+    # print("VOLUME 2", ARRAY_V2)
 
     # SETUP POUR EXTRACTION DATA 
     if nom_condition == "HH" :
@@ -315,8 +336,6 @@ for condition, nom_condition in enumerate(nom_conditions) :
 print("FIN DES CALCULS _________________________")
 #### SOLVING ___________________________________________________________________________________________________________________________________________________________
 
-print(HH_ARRAY_R2)
-
 
 #### PLOTTING __________________________________________________________________________________________________________________________________________________________
 axe_x = np.linspace(0, 300, 16)
@@ -333,25 +352,113 @@ HH_source0 = "#F7ed35"
 LH_source0 = "#A49E23"
 LL_source0 = "#4C4910"
 
-# # C0_m
-# plt.plot(axe_x, HH_ARRAY_C0_m, color=HH_source0, marker="+", label = "C0m_HH")
-# plt.plot(axe_x, LH_ARRAY_C0_m, color=LH_source0, marker="+", label = "C0m_LH")
-# plt.plot(axe_x, LL_ARRAY_C0_m, color=LL_source0, marker="+", label = "C0m_LL")
-# plt.title("C0m simulé", fontsize=12)
-# plt.ylabel("\u03BCmolC/m\u00B3", color="black", fontsize=9)
-# plt.xlabel("°Cj", color="black", fontsize=9)
-# plt.legend(fontsize=9)
-# # plt.ylim(0, )
-# # plt.xlim(0, 300)
 
-# # R2
-# plt.plot(axe_x, HH_ARRAY_R2, color=HH_source0, marker="+", label = "R2_HH")
-# plt.plot(axe_x, LH_ARRAY_R2, color=LH_source0, marker="+", label = "R2_LH")
-# plt.plot(axe_x, LL_ARRAY_R2, color=LL_source0, marker="+", label = "R2_LL")
-# plt.title("Evolution de R2", fontsize=12)
-# plt.ylabel("UNITE A RAJOUTER", color="black", fontsize=9)
-# plt.xlabel("°Cj", color="black", fontsize=9)
-# plt.legend(fontsize=9)
+# RER OBS
+plt.plot(range(0,300,10), EXP_RER1_HH, color=HH_puits1, marker="+", label = "RER1_HH")
+plt.plot(range(0,300,10), EXP_RER1_LH, color=LH_puits1, marker="+", label = "RER1_LH")
+plt.plot(range(0,300,10), EXP_RER1_LL, color=LL_puits1, marker="+", label = "RER1_LL")
+plt.title("Evolution du RER du puits 1 d'après les données experimentales", fontsize=12)
+plt.ylabel("/°Cj", color="black", fontsize=9)
+plt.xlabel("°Cj", color="black", fontsize=9)
+plt.legend(fontsize=9)
+plt.show()
+
+# UTILISATION OBS
+plt.plot(range(0,300,10), EXP_U1_HH, color=HH_puits1, marker="+", label = "U1_HH")
+plt.plot(range(0,300,10), EXP_U1_LH, color=LH_puits1, marker="+", label = "U1_LH")
+plt.plot(range(0,300,10), EXP_U1_LL, color=LL_puits1, marker="+", label = "U1_LL")
+plt.title("Evolution de l'utilisation en C du puits 1 d'après les données experimentales", fontsize=12)
+plt.ylabel("\u03BCmolC/°Cj", color="black", fontsize=9)
+plt.xlabel("°Cj", color="black", fontsize=9)
+plt.legend(fontsize=9)
+plt.show()
+
+# VOLUME OBS
+plt.plot(range(0,300,10), EXP_V1_HH, color=HH_puits1, marker="+", label = "V1_HH")
+plt.plot(range(0,300,10), EXP_V1_LH, color=LH_puits1, marker="+", label = "V1_LH")
+plt.plot(range(0,300,10), EXP_V1_LL, color=LL_puits1, marker="+", label = "V1_LL")
+plt.title("Evolution du volume de puits 1 d'après les données experimentales", fontsize=12)
+plt.ylabel("m\u00B3", color="black", fontsize=9)
+plt.xlabel("°Cj", color="black", fontsize=9)
+plt.legend(fontsize=9)
+plt.show()
+
+# RER1 OBS VS RER1 SIM
+fig, ax = plt.subplots(1, 2)
+ax[0].plot(range(0,300,10), EXP_RER1_HH, color=HH_puits1, marker="+", label = "RER1_HH observé")
+ax[0].plot(range(0,300,10), EXP_RER1_LH, color=LH_puits1, marker="+", label = "RER1_LH observé")
+ax[0].plot(range(0,300,10), EXP_RER1_LL, color=LL_puits1, marker="+", label = "RER1_LL observé")
+ax[1].plot(axe_x, HH_ARRAY_RER1, color=HH_puits2, marker="+", label = "RER1_HH simulé")
+ax[1].plot(axe_x, LH_ARRAY_RER1, color=LH_puits2, marker="+", label = "RER1_LH simulé")
+ax[1].plot(axe_x, LL_ARRAY_RER1, color=LL_puits2, marker="+", label = "RER1_LL simulé")
+ax[0].set_title("Evolution du RER observé dans l'organe puits 1", fontsize=12)
+ax[0].set_ylabel("\u03BCmolC/m\u00B3", color="black", fontsize=9)
+ax[0].set_xlabel("°Cj", color="black", fontsize=9)
+ax[0].legend(fontsize=9)
+ax[1].set_title("Evolution du RER simulé dans l'organe puits 1", fontsize=12)
+ax[1].set_ylabel("\u03BCmolC/m\u00B3", color="black", fontsize=9)
+ax[1].set_xlabel("°Cj", color="black", fontsize=9)
+ax[1].legend(fontsize=9)
+plt.show()
+
+# U1 OBS VS U1 SIM
+fig, ax = plt.subplots(1, 2)
+ax[0].plot(range(0,300,10), EXP_U1_HH, color=HH_puits1, marker="+", label = "U1_HH observé")
+ax[0].plot(range(0,300,10), EXP_U1_LH, color=LH_puits1, marker="+", label = "U1_LH observé")
+ax[0].plot(range(0,300,10), EXP_U1_LL, color=LL_puits1, marker="+", label = "U1_LL observé")
+ax[1].plot(axe_x, HH_ARRAY_U1, color=HH_puits2, marker="+", label = "U1_HH simulé")
+ax[1].plot(axe_x, LH_ARRAY_U1, color=LH_puits2, marker="+", label = "U1_LH simulé")
+ax[1].plot(axe_x, LL_ARRAY_U1, color=LL_puits2, marker="+", label = "U1_LL simulé")
+ax[0].set_title("Evolution de l'utilisation observée dans l'organe puits 1", fontsize=12)
+ax[0].set_ylabel("\u03BCmolC/°Cj", color="black", fontsize=9)
+ax[0].set_xlabel("°Cj", color="black", fontsize=9)
+ax[0].legend(fontsize=9)
+ax[1].set_title("Evolution de l'utilisation simulée dans l'organe puits 1", fontsize=12)
+ax[1].set_ylabel("\u03BCmolC/°Cj", color="black", fontsize=9)
+ax[1].set_xlabel("°Cj", color="black", fontsize=9)
+ax[1].legend(fontsize=9)
+plt.show()
+
+# 11 OBS VS V1 SIM
+fig, ax = plt.subplots(1, 2)
+ax[0].plot(range(0,300,10), EXP_V1_HH, color=HH_puits1, marker="+", label = "V1_HH observé")
+ax[0].plot(range(0,300,10), EXP_V1_LH, color=LH_puits1, marker="+", label = "V1_LH observé")
+ax[0].plot(range(0,300,10), EXP_V1_LL, color=LL_puits1, marker="+", label = "V1_LL observé")
+ax[1].plot(axe_x, HH_ARRAY_V1, color=HH_puits2, marker="+", label = "V1_HH simulé")
+ax[1].plot(axe_x, LH_ARRAY_V1, color=LH_puits2, marker="+", label = "V1_LH simulé")
+ax[1].plot(axe_x, LL_ARRAY_V1, color=LL_puits2, marker="+", label = "V1_LL simulé")
+ax[0].set_title("Evolution du volume observée dans l'organe puits 1", fontsize=12)
+ax[0].set_ylabel("m\u00B3", color="black", fontsize=9)
+ax[0].set_xlabel("°Cj", color="black", fontsize=9)
+ax[0].legend(fontsize=9)
+ax[1].set_title("Evolution du volume simulée dans l'organe puits 1", fontsize=12)
+ax[1].set_ylabel("m\u00B3", color="black", fontsize=9)
+ax[1].set_xlabel("°Cj", color="black", fontsize=9)
+ax[1].legend(fontsize=9)
+plt.show()
+
+
+# C0_m
+plt.plot(axe_x, HH_ARRAY_C0_m, color=HH_source0, marker="+", label = "C0m_HH")
+plt.plot(axe_x, LH_ARRAY_C0_m, color=LH_source0, marker="+", linestyle = "dashed", label = "C0m_LH")
+plt.plot(axe_x, LL_ARRAY_C0_m, color=LL_source0, marker="+", label = "C0m_LL")
+plt.title("C0m simulé", fontsize=12)
+plt.ylabel("\u03BCmolC/m\u00B3", color="black", fontsize=9)
+plt.xlabel("°Cj", color="black", fontsize=9)
+plt.legend(fontsize=9)
+# plt.ylim(0, )
+# plt.xlim(0, 300)
+plt.show()
+
+# R2
+plt.plot(axe_x, HH_ARRAY_R2, color=HH_source0, marker="+", label = "R2_HH")
+plt.plot(axe_x, LH_ARRAY_R2, color=LH_source0, marker="+", label = "R2_LH")
+plt.plot(axe_x, LL_ARRAY_R2, color=LL_source0, marker="+", label = "R2_LL")
+plt.title("Evolution de R2", fontsize=12)
+plt.ylabel("UNITE A RAJOUTER", color="black", fontsize=9)
+plt.xlabel("°Cj", color="black", fontsize=9)
+plt.legend(fontsize=9)
+plt.show()
 
 # # C1_m et C2_m groupées
 # plt.plot(axe_x, HH_ARRAY_C1_m, color=HH_puits1, marker="+", label = "C1m_HH")
@@ -364,23 +471,25 @@ LL_source0 = "#4C4910"
 # plt.ylabel("\u03BCmolC/°Cj", color="black", fontsize=9)
 # plt.xlabel("°Cj", color="black", fontsize=9)
 # plt.legend(fontsize=9)
+# plt.show()
 
-# # C1_m et C2_m séparées
-# fig, ax = plt.subplots(1,2)
-# ax[0].plot(axe_x, HH_ARRAY_C1_m, color=HH_puits1, marker="+", label = "C1m_HH")
-# ax[0].plot(axe_x, LH_ARRAY_C1_m, color=LH_puits1, marker="+", label = "C1m_LH")
-# ax[0].plot(axe_x, LL_ARRAY_C1_m, color=LL_puits1, marker="+", label = "C1m_LL")
-# ax[1].plot(axe_x, HH_ARRAY_C2_m, color=HH_puits2, marker="+", label = "C2m_HH")
-# ax[1].plot(axe_x, LH_ARRAY_C2_m, color=LH_puits2, marker="+", label = "C2m_LH")
-# ax[1].plot(axe_x, LL_ARRAY_C2_m, color=LL_puits2, marker="+", label = "C2m_LL")
-# ax[0].set_title("Evolution de la concenetration en C de l'organe puits 1", fontsize=12)
-# ax[0].set_ylabel("\u03BCmolC/m\u00B3", color="black", fontsize=9)
-# ax[0].set_xlabel("°Cj", color="black", fontsize=9)
-# ax[0].legend(fontsize=9)
-# ax[1].set_title("Evolution de la concentration en C de l'organe puits 2", fontsize=12)
-# ax[1].set_ylabel("\u03BCmolC/m\u00B3", color="black", fontsize=9)
-# ax[1].set_xlabel("°Cj", color="black", fontsize=9)
-# ax[1].legend(fontsize=9)
+# C1_m et C2_m séparées
+fig, ax = plt.subplots(1,2)
+ax[0].plot(axe_x, HH_ARRAY_C1_m, color=HH_puits1, marker="+", label = "C1m_HH")
+ax[0].plot(axe_x, LH_ARRAY_C1_m, color=LH_puits1, marker="+", label = "C1m_LH")
+ax[0].plot(axe_x, LL_ARRAY_C1_m, color=LL_puits1, marker="+", label = "C1m_LL")
+ax[1].plot(axe_x, HH_ARRAY_C2_m, color=HH_puits2, marker="+", label = "C2m_HH")
+ax[1].plot(axe_x, LH_ARRAY_C2_m, color=LH_puits2, marker="+", label = "C2m_LH")
+ax[1].plot(axe_x, LL_ARRAY_C2_m, color=LL_puits2, marker="+", label = "C2m_LL")
+ax[0].set_title("Evolution de la concentration en C de l'organe puits 1", fontsize=12)
+ax[0].set_ylabel("\u03BCmolC/m\u00B3", color="black", fontsize=9)
+ax[0].set_xlabel("°Cj", color="black", fontsize=9)
+ax[0].legend(fontsize=9)
+ax[1].set_title("Evolution de la concentration en C de l'organe puits 2", fontsize=12)
+ax[1].set_ylabel("\u03BCmolC/m\u00B3", color="black", fontsize=9)
+ax[1].set_xlabel("°Cj", color="black", fontsize=9)
+ax[1].legend(fontsize=9)
+plt.show()
 
 # # F01 et F02 groupés
 # plt.plot(axe_x, HH_ARRAY_F01, color=HH_puits1, marker="+", label = "F01_HH")
@@ -393,23 +502,25 @@ LL_source0 = "#4C4910"
 # plt.ylabel("\u03BCmolC/°Cj", color="black", fontsize=9)
 # plt.xlabel("°Cj", color="black", fontsize=9)
 # plt.legend(fontsize=9)
+# plt.show()
 
-# # F01 et F02 séparés
-# fig, ax = plt.subplots(2)
-# ax[0].plot(axe_x, HH_ARRAY_F01, color=HH_puits1, marker="+", label = "F01_HH")
-# ax[0].plot(axe_x, LH_ARRAY_F01, color=LH_puits1, marker="+", label = "F01_LH")
-# ax[0].plot(axe_x, LL_ARRAY_F01, color=LL_puits1, marker="+", label = "F01_LL")
-# ax[1].plot(axe_x, HH_ARRAY_F02, color=HH_puits2, marker="+", label = "F02_HH")
-# ax[1].plot(axe_x, LH_ARRAY_F02, color=LH_puits2, marker="+", label = "F02_LH")
-# ax[1].plot(axe_x, LL_ARRAY_F02, color=LL_puits2, marker="+", label = "F02_LL")
-# ax[0].set_title("Evolution du flux vers le puits 1", fontsize=12)
-# ax[0].set_ylabel("\u03BCmolC/°Cj", color="black", fontsize=9)
-# ax[0].set_xlabel("°Cj", color="black", fontsize=9)
-# ax[0].legend(fontsize=9)
-# ax[1].set_title("Evolution du flux vers le puits 2", fontsize=12)
-# ax[1].set_ylabel("\u03BCmolC/°Cj", color="black", fontsize=9)
-# ax[1].set_xlabel("°Cj", color="black", fontsize=9)
-# ax[1].legend(fontsize=9)
+# F01 et F02 séparés
+fig, ax = plt.subplots(1, 2)
+ax[0].plot(axe_x, HH_ARRAY_F01, color=HH_puits1, marker="+", label = "F01_HH")
+ax[0].plot(axe_x, LH_ARRAY_F01, color=LH_puits1, marker="+", label = "F01_LH")
+ax[0].plot(axe_x, LL_ARRAY_F01, color=LL_puits1, marker="+", label = "F01_LL")
+ax[1].plot(axe_x, HH_ARRAY_F02, color=HH_puits2, marker="+", label = "F02_HH")
+ax[1].plot(axe_x, LH_ARRAY_F02, color=LH_puits2, marker="+", label = "F02_LH")
+ax[1].plot(axe_x, LL_ARRAY_F02, color=LL_puits2, marker="+", label = "F02_LL")
+ax[0].set_title("Evolution du flux vers le puits 1", fontsize=12)
+ax[0].set_ylabel("\u03BCmolC/°Cj", color="black", fontsize=9)
+ax[0].set_xlabel("°Cj", color="black", fontsize=9)
+ax[0].legend(fontsize=9)
+ax[1].set_title("Evolution du flux vers le puits 2", fontsize=12)
+ax[1].set_ylabel("\u03BCmolC/°Cj", color="black", fontsize=9)
+ax[1].set_xlabel("°Cj", color="black", fontsize=9)
+ax[1].legend(fontsize=9)
+plt.show()
 
 # # RER1 et RER2 groupés
 # plt.plot(axe_x, HH_ARRAY_RER1, color=HH_puits1, marker="+", label = "RER1_HH")
@@ -421,23 +532,25 @@ LL_source0 = "#4C4910"
 # plt.title("Evolution du RER des puits 1 et 2", fontsize=12)
 # plt.ylabel("/°Cj", color="black", fontsize=9)
 # plt.legend(fontsize=9)
+# plt.show()
 
-# # RER1 et RER2 séparés
-# fig, ax = plt.subplots(2)
-# ax[0].plot(axe_x, HH_ARRAY_RER1, color=HH_puits1, marker="+", label = "RER1_HH")
-# ax[0].plot(axe_x, LH_ARRAY_RER1, color=LH_puits1, marker="+", label = "RER1_LH")
-# ax[0].plot(axe_x, LL_ARRAY_RER1, color=LL_puits1, marker="+", label = "RER1_LL")
-# ax[1].plot(axe_x, HH_ARRAY_RER2, color=HH_puits2, marker="+", label = "RER2_HH")
-# ax[1].plot(axe_x, LH_ARRAY_RER2, color=LH_puits2, marker="+", label = "RER2_LH")
-# ax[1].plot(axe_x, LL_ARRAY_RER2, color=LL_puits2, marker="+", label = "RER2_LL")
-# ax[0].set_title("Evolution du RER du puits 1", fontsize=12)
-# ax[0].set_ylabel("/°Cj", color="black", fontsize=9)
-# ax[0].set_xlabel("°Cj", color="black", fontsize=9)
-# ax[0].legend(fontsize=9)
-# ax[1].set_title("Evolution du RER du puits 2", fontsize=12)
-# ax[1].set_ylabel("/°Cj", color="black", fontsize=9)
-# ax[1].set_xlabel("°Cj", color="black", fontsize=9)
-# ax[1].legend(fontsize=9)
+# RER1 et RER2 séparés
+fig, ax = plt.subplots(1, 2)
+ax[0].plot(axe_x, HH_ARRAY_RER1, color=HH_puits1, marker="+", label = "RER1_HH")
+ax[0].plot(axe_x, LH_ARRAY_RER1, color=LH_puits1, marker="+", label = "RER1_LH")
+ax[0].plot(axe_x, LL_ARRAY_RER1, color=LL_puits1, marker="+", label = "RER1_LL")
+ax[1].plot(axe_x, HH_ARRAY_RER2, color=HH_puits2, marker="+", label = "RER2_HH")
+ax[1].plot(axe_x, LH_ARRAY_RER2, color=LH_puits2, marker="+", label = "RER2_LH")
+ax[1].plot(axe_x, LL_ARRAY_RER2, color=LL_puits2, marker="+", label = "RER2_LL")
+ax[0].set_title("Evolution du RER du puits 1", fontsize=12)
+ax[0].set_ylabel("/°Cj", color="black", fontsize=9)
+ax[0].set_xlabel("°Cj", color="black", fontsize=9)
+ax[0].legend(fontsize=9)
+ax[1].set_title("Evolution du RER du puits 2", fontsize=12)
+ax[1].set_ylabel("/°Cj", color="black", fontsize=9)
+ax[1].set_xlabel("°Cj", color="black", fontsize=9)
+ax[1].legend(fontsize=9)
+plt.show()
 
 # # U1 et U2 groupés
 # plt.plot(axe_x, HH_ARRAY_U1, color=HH_puits1, marker="+", label = "U1_HH")
@@ -449,23 +562,25 @@ LL_source0 = "#4C4910"
 # plt.title("Evolution de l'utilisation en C des puits 1 et 2", fontsize=12)
 # plt.ylabel("\u03BCmolC/°Cj", color="black", fontsize=9)
 # plt.legend(fontsize=9)
+# plt.show()
 
 # U1 et U2 séparés
-# fig, ax = plt.subplots(2)
-# ax[0].plot(axe_x, HH_ARRAY_U1, color=HH_puits1, marker="+", label = "U1_HH")
-# ax[0].plot(axe_x, LH_ARRAY_U1, color=LH_puits1, marker="+", label = "U1_LH")
-# ax[0].plot(axe_x, LL_ARRAY_U1, color=LL_puits1, marker="+", label = "U1_LL")
-# ax[1].plot(axe_x, HH_ARRAY_U2, color=HH_puits2, marker="+", label = "U2_HH")
-# ax[1].plot(axe_x, LH_ARRAY_U2, color=LH_puits2, marker="+", label = "U2_LH")
-# ax[1].plot(axe_x, LL_ARRAY_U2, color=LL_puits2, marker="+", label = "U2_LL")
-# ax[0].set_title("Evolution de l'utilisation en C du puits 1", fontsize=12)
-# ax[0].set_ylabel("\u03BCmolC/°Cj", color="black", fontsize=9)
-# ax[0].set_xlabel("°Cj", color="black", fontsize=9)
-# ax[0].legend(fontsize=9)
-# ax[1].set_title("Evolution de l'utilisation en C du puits 2", fontsize=12)
-# ax[1].set_ylabel("\u03BCmolC/°Cj", color="black", fontsize=9)
-# ax[1].set_xlabel("°Cj", color="black", fontsize=9)
-# ax[1].legend(fontsize=9)
+fig, ax = plt.subplots(1, 2)
+ax[0].plot(axe_x, HH_ARRAY_U1, color=HH_puits1, marker="+", label = "U1_HH")
+ax[0].plot(axe_x, LH_ARRAY_U1, color=LH_puits1, marker="+", label = "U1_LH")
+ax[0].plot(axe_x, LL_ARRAY_U1, color=LL_puits1, marker="+", label = "U1_LL")
+ax[1].plot(axe_x, HH_ARRAY_U2, color=HH_puits2, marker="+", label = "U2_HH")
+ax[1].plot(axe_x, LH_ARRAY_U2, color=LH_puits2, marker="+", label = "U2_LH")
+ax[1].plot(axe_x, LL_ARRAY_U2, color=LL_puits2, marker="+", label = "U2_LL")
+ax[0].set_title("Evolution de l'utilisation en C du puits 1", fontsize=12)
+ax[0].set_ylabel("\u03BCmolC/°Cj", color="black", fontsize=9)
+ax[0].set_xlabel("°Cj", color="black", fontsize=9)
+ax[0].legend(fontsize=9)
+ax[1].set_title("Evolution de l'utilisation en C du puits 2", fontsize=12)
+ax[1].set_ylabel("\u03BCmolC/°Cj", color="black", fontsize=9)
+ax[1].set_xlabel("°Cj", color="black", fontsize=9)
+ax[1].legend(fontsize=9)
+plt.show()
 
 # # V1 et V2 groupés
 # plt.plot(axe_x, HH_ARRAY_V1, color=HH_puits1, marker="+", label = "V1_HH")
@@ -475,28 +590,28 @@ LL_source0 = "#4C4910"
 # plt.plot(axe_x, LH_ARRAY_V2, color=LH_puits2, marker="+", label = "V2_LH")
 # plt.plot(axe_x, LL_ARRAY_V2, color=LL_puits2, marker="+", label = "V2_LL")
 # plt.title("Evolution du volume des organes puits 1 et 2", fontsize=12)
-# plt.sylabel("m\u00B3j", color="black", fontsize=9)
+# plt.ylabel("m\u00B3j", color="black", fontsize=9)
 # plt.legend(fontsize=9)
+# plt.show()
 
-# # V1 et V2 séparés
-# fig, ax = plt.subplots(2)
-# ax[0].plot(axe_x, HH_ARRAY_V1, color=HH_puits1, marker="+", label = "V1_HH")
-# ax[0].plot(axe_x, LH_ARRAY_V1, color=LH_puits1, marker="+", label = "V1_LH")
-# ax[0].plot(axe_x, LL_ARRAY_V1, color=LL_puits1, marker="+", label = "V1_LL")
-# ax[1].plot(axe_x, HH_ARRAY_V2, color=HH_puits2, marker="+", label = "V2_HH")
-# ax[1].plot(axe_x, LH_ARRAY_V2, color=LH_puits2, marker="+", label = "V2_LH")
-# ax[1].plot(axe_x, LL_ARRAY_V2, color=LL_puits2, marker="+", label = "V2_LL")
-# ax[0].set_title("Evolution du volume du puits 1", fontsize=12)
-# ax[0].set_ylabel("m\u00B3", color="black", fontsize=9)
-# ax[0].set_xlabel("°Cj", color="black", fontsize=9)
-# ax[0].legend(fontsize=9)
-# ax[1].set_title("Evolution du volume du puits 2", fontsize=12)
-# ax[1].set_ylabel("m\u00B3", color="black", fontsize=9)
-# ax[1].set_xlabel("°Cj", color="black", fontsize=9)
-# ax[1].legend(fontsize=9)
-
+# V1 et V2 séparés
+fig, ax = plt.subplots(1, 2)
+ax[0].plot(axe_x, HH_ARRAY_V1, color=HH_puits1, marker="+", label = "V1_HH")
+ax[0].plot(axe_x, LH_ARRAY_V1, color=LH_puits1, marker="+", label = "V1_LH")
+ax[0].plot(axe_x, LL_ARRAY_V1, color=LL_puits1, marker="+", label = "V1_LL")
+ax[1].plot(axe_x, HH_ARRAY_V2, color=HH_puits2, marker="+", label = "V2_HH")
+ax[1].plot(axe_x, LH_ARRAY_V2, color=LH_puits2, marker="+", label = "V2_LH")
+ax[1].plot(axe_x, LL_ARRAY_V2, color=LL_puits2, marker="+", label = "V2_LL")
+ax[0].set_title("Evolution du volume du puits 1", fontsize=12)
+ax[0].set_ylabel("m\u00B3", color="black", fontsize=9)
+ax[0].set_xlabel("°Cj", color="black", fontsize=9)
+ax[0].legend(fontsize=9)
+ax[1].set_title("Evolution du volume du puits 2", fontsize=12)
+ax[1].set_ylabel("m\u00B3", color="black", fontsize=9)
+ax[1].set_xlabel("°Cj", color="black", fontsize=9)
+ax[1].legend(fontsize=9)
 plt.show()
-#### PLOTTING __________________________________________________________________________________________________________________________________________________________
+# #### PLOTTING __________________________________________________________________________________________________________________________________________________________
 
 
 
